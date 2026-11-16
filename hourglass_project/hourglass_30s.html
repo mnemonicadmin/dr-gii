@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Песочные часы — 30 секунд</title>
+  <style>
+    :root {
+      --text: #f7efe5;
+      --text-soft: rgba(247, 239, 229, 0.72);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 50% 22%, rgba(125, 83, 41, 0.18), transparent 28%),
+        radial-gradient(circle at 50% 80%, rgba(13, 96, 118, 0.18), transparent 24%),
+        linear-gradient(180deg, #140f0c 0%, #090909 38%, #050505 100%);
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(255,255,255,0.03), transparent 24%),
+        radial-gradient(circle at 50% 50%, rgba(255,214,164,0.04), transparent 38%);
+      mix-blend-mode: screen;
+    }
+
+    .stage {
+      min-height: 100%;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .hourglass-widget {
+      width: min(92vw, 760px);
+      aspect-ratio: 760 / 900;
+      position: relative;
+      user-select: none;
+      outline: none;
+      filter: drop-shadow(0 22px 34px rgba(0, 0, 0, 0.55));
+      animation: floatWidget 6.6s ease-in-out infinite;
+      cursor: default;
+    }
+
+    .hourglass-widget:focus-visible {
+      box-shadow: 0 0 0 2px rgba(255,255,255,0.14), 0 0 0 6px rgba(111, 232, 255, 0.18);
+      border-radius: 22px;
+    }
+
+    @keyframes floatWidget {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hint {
+      position: absolute;
+      inset: auto 0 22px 0;
+      text-align: center;
+      font-size: clamp(12px, 1.7vw, 15px);
+      color: rgba(247, 239, 229, 0.72);
+      letter-spacing: 0.03em;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .halo {
+      position: absolute;
+      left: 50%;
+      top: 33%;
+      width: 340px;
+      height: 340px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.03) 26%, transparent 58%);
+      filter: blur(14px);
+      animation: haloPulse 3.8s ease-in-out infinite;
+    }
+
+    @keyframes haloPulse {
+      0%, 100% { opacity: 0.45; transform: translate(-50%, -50%) scale(0.98); }
+      50% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.02); }
+    }
+
+    .artboard {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .artboard-inner {
+      position: relative;
+      height: 100%;
+      aspect-ratio: 1062 / 1655;
+    }
+
+    .layer {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      user-select: none;
+      -webkit-user-drag: none;
+      pointer-events: none;
+    }
+
+    .layer.back {
+      z-index: 1;
+      filter: drop-shadow(0 12px 20px rgba(0,0,0,0.20));
+    }
+
+    .layer.front {
+      z-index: 4;
+      filter: drop-shadow(0 18px 24px rgba(0,0,0,0.22));
+    }
+
+    .rotor {
+      position: absolute;
+      left: 50%;
+      top: 31.72%;
+      width: 47.46%;
+      height: 63.34%;
+      transform: translate(-50%, -50%) rotate(0deg);
+      transform-origin: 50% 50%;
+      transition: transform 1050ms cubic-bezier(0.2, 0.78, 0.18, 1);
+      z-index: 3;
+      overflow: hidden;
+      pointer-events: none;
+      will-change: transform;
+      filter: drop-shadow(0 10px 16px rgba(0,0,0,0.18));
+      -webkit-mask: url('hourglass_glass_mask_crop.png') center / 100% 100% no-repeat;
+      mask: url('hourglass_glass_mask_crop.png') center / 100% 100% no-repeat;
+    }
+
+    .hourglass-widget:hover .rotor {
+      filter:
+        drop-shadow(0 14px 18px rgba(0,0,0,0.28))
+        drop-shadow(0 0 12px rgba(241, 199, 207, 0.1));
+    }
+
+    .sand-canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div id="hourglass" class="hourglass-widget" tabindex="0" role="button" aria-label="Песочные часы на 30 секунд. После окончания таймера нажмите, чтобы перевернуть колбу и запустить следующий цикл.">
+      <div class="halo"></div>
+
+      <div class="artboard" aria-hidden="true">
+        <div class="artboard-inner">
+          <img class="layer back" src="hourglass_back_layer.png" alt="" />
+          <div id="rotor" class="rotor">
+            <canvas id="sandCanvas" class="sand-canvas" width="360" height="520"></canvas>
+          </div>
+          <img class="layer front" src="hourglass_front_overlay.png" alt="" />
+        </div>
+      </div>
+
+      <div id="hint" class="hint">Таймер уже идёт — песок сыпется сверху вниз</div>
+    </div>
+  </div>
+
+  <script>
+    const DURATION_MS = 30000;
+    const FLIP_MS = 1050;
+    const LOGICAL_W = 360;
+    const LOGICAL_H = 520;
+
+    const widget = document.getElementById('hourglass');
+    const rotor = document.getElementById('rotor');
+    const canvas = document.getElementById('sandCanvas');
+    const ctx = canvas.getContext('2d');
+    const hint = document.getElementById('hint');
+
+    let rotation = 0;
+    let runStart = 0;
+    let lastTime = performance.now();
+    let particles = [];
+    let emitCarry = 0;
+    let running = false;
+    let sandReversed = false;
+    let isFlipping = false;
+    let flipTimeoutId = 0;
+
+    function resizeCanvas() {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(LOGICAL_W * dpr);
+      canvas.height = Math.round(LOGICAL_H * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.imageSmoothingEnabled = true;
+    }
+
+    function clamp(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
+
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    function rand(min, max) {
+      return min + Math.random() * (max - min);
+    }
+
+    function getProgress(now) {
+      return clamp(Math.max(0, now - runStart) / DURATION_MS, 0, 1);
+    }
+
+    function canFlip(now = performance.now()) {
+      return !isFlipping && getProgress(now) >= 1;
+    }
+
+    function applySandOrientation() {
+      if (!sandReversed) return;
+      ctx.translate(LOGICAL_W / 2, LOGICAL_H / 2);
+      ctx.rotate(Math.PI);
+      ctx.translate(-LOGICAL_W / 2, -LOGICAL_H / 2);
+    }
+
+    function traceTopBulb(target) {
+      target.moveTo(180, 6);
+      target.bezierCurveTo(220, 6, 272, 44, 277, 108);
+      target.bezierCurveTo(281, 167, 242, 215, 198, 248);
+      target.bezierCurveTo(187, 256, 182, 263, 180, 273);
+      target.bezierCurveTo(178, 263, 173, 256, 162, 248);
+      target.bezierCurveTo(118, 215, 79, 167, 83, 108);
+      target.bezierCurveTo(88, 44, 140, 6, 180, 6);
+      target.closePath();
+    }
+
+    function traceBottomBulb(target) {
+      target.moveTo(180, 514);
+      target.bezierCurveTo(223, 510, 269, 478, 277, 421);
+      target.bezierCurveTo(286, 363, 253, 318, 208, 287);
+      target.bezierCurveTo(194, 277, 185, 269, 180, 259);
+      target.bezierCurveTo(175, 269, 166, 277, 152, 287);
+      target.bezierCurveTo(107, 318, 74, 363, 83, 421);
+      target.bezierCurveTo(91, 478, 137, 510, 180, 514);
+      target.closePath();
+    }
+
+    function traceNeck(target) {
+      target.moveTo(173, 247);
+      target.bezierCurveTo(176, 258, 177.5, 268, 178, 278);
+      target.lineTo(182, 278);
+      target.bezierCurveTo(182.5, 268, 184, 258, 187, 247);
+      target.closePath();
+    }
+
+    function pathTopBulb(target) {
+      target.beginPath();
+      traceTopBulb(target);
+    }
+
+    function pathBottomBulb(target) {
+      target.beginPath();
+      traceBottomBulb(target);
+    }
+
+    function clipTopBulb() {
+      pathTopBulb(ctx);
+      ctx.clip();
+    }
+
+    function clipBottomBulb() {
+      pathBottomBulb(ctx);
+      ctx.clip();
+    }
+
+    function clipInterior() {
+      ctx.beginPath();
+      traceTopBulb(ctx);
+      traceBottomBulb(ctx);
+      traceNeck(ctx);
+      ctx.clip();
+    }
+
+    function getTopSandState(progress) {
+      const amount = 1 - progress;
+      const surfaceY = lerp(72, 224, 1 - amount);
+      const dipY = Math.min(254, surfaceY + lerp(40, 20, amount));
+      return { amount, surfaceY, dipY };
+    }
+
+    function getBottomSandState(progress) {
+      const amount = progress;
+      const sideY = 510 - amount * 192;
+      const peakLift = lerp(36, 10, amount);
+      const spread = 90 + amount * 58;
+      return { amount, sideY, peakLift, spread };
+    }
+
+    function bottomSurfaceYAt(x, progress) {
+      const { sideY, peakLift, spread } = getBottomSandState(progress);
+      const dx = clamp(Math.abs(x - 180) / spread, 0, 1);
+      const mound = Math.pow(1 - dx, 1.58);
+      const flatten = clamp((progress - 0.78) / 0.22, 0, 1);
+      return sideY - peakLift * mound + flatten * 8 * dx * dx;
+    }
+
+    function spawnParticle() {
+      particles.push({
+        x: 180 + rand(-1.6, 1.6),
+        y: 252 + rand(-2, 1.5),
+        vx: rand(-8, 8),
+        vy: rand(26, 50),
+        r: rand(0.8, 1.55),
+        life: rand(1.7, 2.5),
+        bounce: 0,
+        alpha: rand(0.75, 1)
+      });
+    }
+
+    function updateParticles(dt, progress, now) {
+      const isFlowing = running && now >= runStart && progress < 1;
+
+      if (isFlowing) {
+        const flowFade = progress < 0.985 ? 1 : clamp((1 - progress) / 0.015, 0, 1);
+        emitCarry += dt * 190 * flowFade;
+        while (emitCarry >= 1) {
+          spawnParticle();
+          emitCarry -= 1;
+        }
+      }
+
+      const nextParticles = [];
+
+      for (const p of particles) {
+        p.life -= dt;
+        p.vy += 560 * dt;
+        p.vx *= 0.995;
+        p.x += p.vx * dt;
+        p.y += p.vy * dt;
+        p.x += Math.sin((now * 0.014) + p.x * 0.08) * 0.018;
+
+        if (p.y > 292) {
+          const surface = bottomSurfaceYAt(p.x, progress);
+          if (p.y >= surface && p.vy > 0) {
+            p.y = surface - rand(0.2, 0.7);
+            p.vy *= -0.16;
+            p.vx *= 0.34;
+            p.bounce += 1;
+          }
+        }
+
+        const dead = (
+          p.life <= 0 ||
+          p.y > 518 ||
+          p.x < 70 ||
+          p.x > 290 ||
+          (p.bounce > 1 && Math.abs(p.vy) < 16)
+        );
+
+        if (!dead) nextParticles.push(p);
+      }
+
+      particles = nextParticles;
+    }
+
+    function drawInnerGlow() {
+      const topGlow = ctx.createRadialGradient(180, 118, 20, 180, 118, 126);
+      topGlow.addColorStop(0, 'rgba(255,255,255,0.12)');
+      topGlow.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = topGlow;
+      pathTopBulb(ctx);
+      ctx.fill();
+
+      const bottomGlow = ctx.createRadialGradient(180, 404, 20, 180, 404, 128);
+      bottomGlow.addColorStop(0, 'rgba(255,255,255,0.08)');
+      bottomGlow.addColorStop(1, 'rgba(255,255,255,0)');
+      ctx.fillStyle = bottomGlow;
+      pathBottomBulb(ctx);
+      ctx.fill();
+    }
+
+    function drawTopSand(progress, now) {
+      const { amount, surfaceY, dipY } = getTopSandState(progress);
+      if (amount <= 0.002) return;
+
+      ctx.save();
+      clipTopBulb();
+
+      const grad = ctx.createLinearGradient(0, surfaceY, 0, 270);
+      grad.addColorStop(0, '#f0d3b0');
+      grad.addColorStop(0.46, '#cfa37f');
+      grad.addColorStop(1, '#9b6f52');
+      ctx.fillStyle = grad;
+
+      const wobble = Math.sin(now * 0.0032) * 0.9;
+      ctx.beginPath();
+      ctx.moveTo(78, 274);
+      ctx.lineTo(78, surfaceY + 6);
+      ctx.bezierCurveTo(108, surfaceY - 1 + wobble, 135, surfaceY + 1.5, 160, surfaceY + 8);
+      ctx.lineTo(171, dipY - 4);
+      ctx.quadraticCurveTo(180, dipY + 9, 189, dipY - 4);
+      ctx.lineTo(200, surfaceY + 8);
+      ctx.bezierCurveTo(225, surfaceY + 1.5, 252, surfaceY - 1 - wobble, 282, surfaceY + 6);
+      ctx.lineTo(282, 274);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.globalAlpha = 0.18;
+      for (let i = 0; i < 28 * amount; i++) {
+        const x = rand(112, 248);
+        const y = rand(surfaceY + 8, 236);
+        ctx.fillStyle = i % 2 ? '#f3ddbf' : '#c28f66';
+        ctx.fillRect(x, y, 1.05, 1.05);
+      }
+
+      ctx.restore();
+    }
+
+    function drawBottomSand(progress, now) {
+      const { amount, sideY } = getBottomSandState(progress);
+      if (amount <= 0.002) return;
+
+      ctx.save();
+      clipBottomBulb();
+
+      const grad = ctx.createLinearGradient(0, 280, 0, 520);
+      grad.addColorStop(0, '#efcfac');
+      grad.addColorStop(0.46, '#c89a73');
+      grad.addColorStop(1, '#94684c');
+      ctx.fillStyle = grad;
+
+      ctx.beginPath();
+      ctx.moveTo(64, 520);
+      ctx.lineTo(64, sideY + 16);
+      for (let x = 64; x <= 296; x += 5) {
+        const ripple = Math.sin((x * 0.055) + (now * 0.0021)) * 0.28;
+        ctx.lineTo(x, bottomSurfaceYAt(x, progress) + ripple);
+      }
+      ctx.lineTo(296, 520);
+      ctx.closePath();
+      ctx.fill();
+
+      const baseShade = ctx.createLinearGradient(0, 394, 0, 520);
+      baseShade.addColorStop(0, 'rgba(124, 85, 60, 0)');
+      baseShade.addColorStop(1, 'rgba(86, 55, 38, 0.34)');
+      ctx.fillStyle = baseShade;
+      ctx.fillRect(74, 386, 212, 134);
+
+      ctx.globalAlpha = 0.16;
+      for (let i = 0; i < 18 + amount * 50; i++) {
+        const x = rand(112, 248);
+        const y = bottomSurfaceYAt(x, progress) + rand(2, 38);
+        ctx.fillStyle = i % 2 ? '#f1dbbc' : '#c49269';
+        ctx.fillRect(x, y, 1.08, 1.08);
+      }
+
+      ctx.restore();
+    }
+
+    function drawFlow(progress) {
+      const flowAlpha = progress < 1 ? (progress < 0.985 ? 0.84 : clamp((1 - progress) / 0.015, 0, 1) * 0.84) : 0;
+      if (flowAlpha <= 0.001) return;
+
+      ctx.save();
+      clipInterior();
+
+      const grad = ctx.createLinearGradient(180, 250, 180, 348);
+      grad.addColorStop(0, 'rgba(240, 212, 181, 0)');
+      grad.addColorStop(0.18, `rgba(240, 212, 181, ${0.78 * flowAlpha})`);
+      grad.addColorStop(0.76, `rgba(209, 163, 121, ${0.65 * flowAlpha})`);
+      grad.addColorStop(1, 'rgba(209, 163, 121, 0)');
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 2.2;
+      ctx.lineCap = 'round';
+      ctx.beginPath();
+      ctx.moveTo(180, 250);
+      ctx.bezierCurveTo(180, 268, 180, 304, 180, 342);
+      ctx.stroke();
+
+      const impactY = bottomSurfaceYAt(180, progress);
+      const impact = ctx.createRadialGradient(180, impactY - 4, 2, 180, impactY, 28);
+      impact.addColorStop(0, `rgba(255, 235, 206, ${0.28 * flowAlpha})`);
+      impact.addColorStop(1, 'rgba(255, 235, 206, 0)');
+      ctx.fillStyle = impact;
+      ctx.beginPath();
+      ctx.arc(180, impactY, 28, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    function drawParticles() {
+      if (!particles.length) return;
+      ctx.save();
+      clipInterior();
+      for (const p of particles) {
+        ctx.globalAlpha = p.alpha;
+        ctx.fillStyle = 'rgba(239, 207, 171, 0.96)';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+      ctx.globalAlpha = 1;
+    }
+
+    function drawBloom() {
+      const glow = ctx.createRadialGradient(180, 260, 40, 180, 260, 210);
+      glow.addColorStop(0, 'rgba(255, 218, 180, 0.05)');
+      glow.addColorStop(1, 'rgba(255, 218, 180, 0)');
+      ctx.fillStyle = glow;
+      ctx.beginPath();
+      ctx.arc(180, 260, 210, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    function render(now) {
+      const elapsed = Math.max(0, now - runStart);
+      const progress = getProgress(now);
+
+      if (progress >= 1 && !isFlipping) {
+        running = false;
+      }
+
+      ctx.clearRect(0, 0, LOGICAL_W, LOGICAL_H);
+      drawBloom();
+
+      ctx.save();
+      applySandOrientation();
+      drawInnerGlow();
+      drawTopSand(progress, now);
+      drawBottomSand(progress, now);
+      drawFlow(progress);
+      drawParticles();
+      ctx.restore();
+
+      widget.style.cursor = canFlip(now) ? 'pointer' : 'default';
+
+      if (isFlipping) {
+        hint.textContent = 'Колба переворачивается…';
+      } else if (progress >= 1) {
+        hint.textContent = 'Песок пересыпался — нажмите на часы, чтобы перевернуть колбу и запустить снова';
+      } else {
+        hint.textContent = 'Таймер уже идёт — песок сыпется сверху вниз';
+      }
+    }
+
+    function startTimer(withFlip = true) {
+      const now = performance.now();
+      running = true;
+      particles = [];
+      emitCarry = 0;
+
+      if (flipTimeoutId) {
+        clearTimeout(flipTimeoutId);
+        flipTimeoutId = 0;
+      }
+
+      if (withFlip) {
+        sandReversed = !sandReversed;
+        isFlipping = true;
+        rotation += 180;
+        rotor.style.transform = `translate(-50%, -50%) rotate(${rotation}deg)`;
+        runStart = now + FLIP_MS;
+        flipTimeoutId = window.setTimeout(() => {
+          isFlipping = false;
+          flipTimeoutId = 0;
+        }, FLIP_MS);
+      } else {
+        sandReversed = false;
+        isFlipping = false;
+        runStart = now;
+      }
+
+      render(now);
+    }
+
+    function tick(now) {
+      const dt = Math.min(0.033, (now - lastTime) / 1000);
+      lastTime = now;
+      updateParticles(dt, getProgress(now), now);
+      render(now);
+      requestAnimationFrame(tick);
+    }
+
+    widget.addEventListener('click', () => {
+      if (canFlip()) startTimer(true);
+    });
+
+    widget.addEventListener('keydown', (event) => {
+      if ((event.key === 'Enter' || event.key === ' ') && canFlip()) {
+        event.preventDefault();
+        startTimer(true);
+      }
+    });
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    startTimer(false);
+    requestAnimationFrame(tick);
+  </script>
+</body>
+</html>
