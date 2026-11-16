@@ -578,18 +578,18 @@
   const ATLAS_PLATES = [
     {
       roman: "I",
-      name: "Остеология · Череп и грудная клетка",
-      name_en: "Osteology · Skull & Ribcage",
+      name: "Рис. 698 · Органы грудной полости (Ангиология)",
+      name_en: "Fig. 698 · Thoracic Cavity Organs (Angiology)",
     },
     {
       roman: "II",
-      name: "Ангиология · Сердце и сосуды",
-      name_en: "Angiology · Heart & Vessels",
+      name: "Рис. 926 · Продолговатый мозг и мост (ЦНС)",
+      name_en: "Fig. 926 · Medulla Oblongata & Pons (CNS)",
     },
     {
       roman: "III",
-      name: "Миология · Кисть и мышцы",
-      name_en: "Myology · Hand & Muscles",
+      name: "Рис. 49 · Череп, cranium; вид справа (Остеология)",
+      name_en: "Fig. 49 · Skull, Cranium; Right View (Osteology)",
     },
   ];
 
@@ -1856,316 +1856,134 @@
     c.height = H;
     const g = c.getContext("2d");
 
-    // Warm antique parchment wash
+    // Warm antique ivory-parchment wash suited for real Sinelnikov plates
     const bg = g.createLinearGradient(0, 0, W, H);
-    bg.addColorStop(0, "#f3e3bf");
-    bg.addColorStop(0.5, "#ead4a6");
-    bg.addColorStop(1, "#dfc28c");
+    bg.addColorStop(0, "#faf2df");
+    bg.addColorStop(0.5, "#f4e7cb");
+    bg.addColorStop(1, "#ead7b1");
     g.fillStyle = bg;
     g.fillRect(0, 0, W, H);
 
+    return { c, g };
+  }
+
+  function finishParchmentSpread(g, W, H, romanLabel) {
     // Subtle spine gutter darkening across middle x = W / 2
-    const gutter = g.createLinearGradient(W * 0.43, 0, W * 0.57, 0);
+    const gutter = g.createLinearGradient(W * 0.44, 0, W * 0.56, 0);
     gutter.addColorStop(0, "rgba(75, 42, 18, 0)");
-    gutter.addColorStop(0.46, "rgba(62, 34, 14, 0.34)");
-    gutter.addColorStop(0.5, "rgba(38, 18, 7, 0.52)");
-    gutter.addColorStop(0.54, "rgba(62, 34, 14, 0.30)");
+    gutter.addColorStop(0.46, "rgba(62, 34, 14, 0.28)");
+    gutter.addColorStop(0.5, "rgba(38, 18, 7, 0.46)");
+    gutter.addColorStop(0.54, "rgba(62, 34, 14, 0.25)");
     gutter.addColorStop(1, "rgba(75, 42, 18, 0)");
     g.fillStyle = gutter;
     g.fillRect(0, 0, W, H);
 
     // Double sepia ruled borders on left & right pages
-    g.strokeStyle = "rgba(86, 52, 26, 0.42)";
-    g.lineWidth = 1.2;
-    g.strokeRect(12, 12, W * 0.5 - 24, H - 24);
-    g.strokeRect(W * 0.5 + 12, 12, W * 0.5 - 24, H - 24);
+    g.strokeStyle = "rgba(86, 52, 26, 0.38)";
+    g.lineWidth = 2.0;
+    g.strokeRect(18, 18, W * 0.5 - 36, H - 36);
+    g.strokeRect(W * 0.5 + 18, 18, W * 0.5 - 36, H - 36);
 
     // Plate Roman numeral header on top-left corner
     g.fillStyle = "#5c3018";
-    g.font = "bold 12px Georgia, serif";
+    g.font = "bold 18px Georgia, serif";
     g.textAlign = "left";
-    g.fillText(`ТАБЛ. ${romanLabel}`, 20, 29);
-
-    return { c, g };
+    g.fillText(`ТАБЛ. ${romanLabel}`, 30, 42);
   }
 
-  function buildAtlasPlates() {
-    const W = 440;
-    const H = 264;
+  function drawImageFitMultiply(g, img, sx, sy, sw, sh, dx, dy, dw, dh) {
+    if (!img) return;
+    const srcAspect = sw / sh;
+    const dstAspect = dw / dh;
+    let rw = dw;
+    let rh = dh;
+    if (srcAspect > dstAspect) {
+      rh = dw / srcAspect;
+    } else {
+      rw = dh * srcAspect;
+    }
+    const rx = dx + (dw - rw) * 0.5;
+    const ry = dy + (dh - rh) * 0.5;
+    g.save();
+    g.globalCompositeOperation = "multiply";
+    g.drawImage(img, sx, sy, sw, sh, rx, ry, rw, rh);
+    g.restore();
+  }
 
-    // Plate I: Skull (left) + Ribcage & Title Cartouche (right)
+  function buildAtlasPlates(plateImgs = []) {
+    const W = 880;
+    const H = 528;
+    const [ap1, ap2, ap3] = plateImgs;
+
+    // Plate I: Uploaded Image 1 (Рис. 698 — Положение органов в грудной полости; вид спереди)
     const p1 = createParchmentPage(W, H, "I");
-    {
-      const g = p1.g;
-      g.strokeStyle = "#3a1e0e";
-      g.fillStyle = "#4d2a15";
-      g.lineCap = "round";
-
-      // Left page: Cranium engraving
-      g.save();
-      g.translate(108, 128);
-      g.lineWidth = 2.0;
-      g.beginPath();
-      g.arc(0, -18, 44, Math.PI * 0.85, Math.PI * 2.15, false);
-      g.quadraticCurveTo(42, 10, 34, 24);
-      g.lineTo(38, 40);
-      g.lineTo(22, 54);
-      g.lineTo(-10, 52);
-      g.quadraticCurveTo(-34, 34, -40, 2);
-      g.closePath();
-      g.fillStyle = "rgba(182, 144, 92, 0.25)";
-      g.fill();
-      g.stroke();
-
-      // Orbit, nasal & mandible articulation
-      g.beginPath();
-      g.ellipse(16, -6, 11, 9, -0.1, 0, Math.PI * 2);
-      g.fillStyle = "#331b0e";
-      g.fill();
-      g.stroke();
-
-      g.beginPath();
-      g.moveTo(31, 4);
-      g.lineTo(38, 17);
-      g.lineTo(28, 20);
-      g.closePath();
-      g.fill();
-
-      // Teeth & jaw suture lines
-      g.strokeStyle = "#3a1e0e";
-      g.lineWidth = 1.4;
-      g.beginPath();
-      g.moveTo(4, 32);
-      g.lineTo(33, 30);
-      for (let tx = 8; tx <= 30; tx += 5.5) {
-        g.moveTo(tx, 26);
-        g.lineTo(tx, 36);
-      }
-      // Subtle hatching behind crown
-      g.lineWidth = 0.85;
-      for (let a = -2.3; a < -0.5; a += 0.24) {
-        g.moveTo(Math.cos(a) * 34, -18 + Math.sin(a) * 34);
-        g.lineTo(Math.cos(a) * 41, -18 + Math.sin(a) * 41);
-      }
-      g.stroke();
-
-      // Handwritten Latin labels
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("Cranium · Ossa capitis", 0, 86);
-      g.restore();
-
-      // Right page: Title header + Ribcage plate
-      g.save();
-      g.translate(332, 0);
-      g.fillStyle = "#3a1e0e";
-      g.font = "bold 13px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("АТЛАСЪ АНАТОМІИ", 0, 36);
-      g.font = "italic 11px Georgia, serif";
-      g.fillStyle = "#7a3b1c";
-      g.fillText("Р. Д. Синельниковъ", 0, 52);
-      g.strokeStyle = "rgba(122, 59, 28, 0.5)";
-      g.lineWidth = 1;
-      g.beginPath();
-      g.moveTo(-64, 58);
-      g.lineTo(64, 58);
-      g.stroke();
-
-      // Sternum + 7 paired curved ribs
-      g.strokeStyle = "#351b0c";
-      g.lineWidth = 2.0;
-      g.beginPath();
-      g.moveTo(-42, 82);
-      g.quadraticCurveTo(-18, 74, 0, 84);
-      g.quadraticCurveTo(18, 74, 42, 82);
-      g.stroke();
-
-      // Sternum plate
-      g.fillStyle = "rgba(166, 126, 74, 0.4)";
-      g.beginPath();
-      g.rect(-5, 84, 10, 72);
-      g.fill();
-      g.stroke();
-
-      g.lineWidth = 1.8;
-      for (let i = 0; i < 7; i++) {
-        const y = 92 + i * 11;
-        const w = 34 + Math.sin((i / 6) * Math.PI) * 26;
-        g.beginPath();
-        g.moveTo(-5, y);
-        g.bezierCurveTo(-w * 0.7, y - 5, -w, y + 6, -w * 0.72, y + 16);
-        g.moveTo(5, y);
-        g.bezierCurveTo(w * 0.7, y - 5, w, y + 6, w * 0.72, y + 16);
-        g.stroke();
-      }
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.fillText("Thorax · Costae", 0, 224);
-      g.restore();
+    if (ap1) {
+      // Left page: full Sinelnikov page (header + lungs + 3-column caption text)
+      drawImageFitMultiply(p1.g, ap1, 0, 0, ap1.width, ap1.height, 26, 48, 388, 456);
+      // Right page: large magnified view of the thoracic organs illustration (Рис. 698)
+      drawImageFitMultiply(
+        p1.g,
+        ap1,
+        Math.round(ap1.width * 0.08),
+        Math.round(ap1.height * 0.13),
+        Math.round(ap1.width * 0.84),
+        Math.round(ap1.height * 0.64),
+        466,
+        28,
+        388,
+        472
+      );
     }
+    finishParchmentSpread(p1.g, W, H, "I");
 
-    // Plate II: Heart (left) + Arterial Tree (right)
+    // Plate II: Uploaded Image 2 (Рис. 926 — Продолговатый мозг, мост и ножки мозга)
     const p2 = createParchmentPage(W, H, "II");
-    {
-      const g = p2.g;
-      // Left page: Anatomical Heart & Aorta
-      g.save();
-      g.translate(110, 134);
-      g.lineCap = "round";
-
-      // Aortic arch (crimson ink)
-      g.strokeStyle = "#7c1f19";
-      g.fillStyle = "rgba(148, 38, 28, 0.36)";
-      g.lineWidth = 2.2;
-      g.beginPath();
-      g.moveTo(-8, -22);
-      g.bezierCurveTo(-14, -64, 24, -66, 22, -26);
-      g.lineTo(10, -24);
-      g.bezierCurveTo(10, -48, -4, -46, -2, -22);
-      g.closePath();
-      g.fill();
-      g.stroke();
-
-      // Main cardiac chambers
-      g.beginPath();
-      g.moveTo(-24, -18);
-      g.bezierCurveTo(-48, 12, -20, 56, 18, 58);
-      g.bezierCurveTo(42, 42, 40, -8, 16, -24);
-      g.closePath();
-      g.fillStyle = "rgba(165, 58, 42, 0.42)";
-      g.fill();
-      g.strokeStyle = "#3a170c";
-      g.lineWidth = 2.1;
-      g.stroke();
-
-      // Coronary vessels branching
-      g.strokeStyle = "#6e1612";
-      g.lineWidth = 1.4;
-      g.beginPath();
-      g.moveTo(-2, -16);
-      g.quadraticCurveTo(6, 14, 14, 46);
-      g.moveTo(4, 4);
-      g.quadraticCurveTo(-14, 16, -24, 30);
-      g.moveTo(7, 16);
-      g.quadraticCurveTo(22, 22, 30, 34);
-      g.stroke();
-
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("Cor · Arcus aortae", 0, 86);
-      g.restore();
-
-      // Right page: Vascular Tree & Pulse notes
-      g.save();
-      g.translate(330, 128);
-      g.strokeStyle = "#7c1f19";
-      g.lineWidth = 2.2;
-      g.beginPath();
-      g.moveTo(0, -68);
-      g.quadraticCurveTo(-4, -10, 0, 48);
-      g.stroke();
-
-      g.lineWidth = 1.4;
-      const branches = [
-        [-4, -42, -48, -14],
-        [4, -36, 46, -6],
-        [-2, -8, -54, 24],
-        [2, 2, 52, 32],
-        [-1, 24, -36, 60],
-        [1, 28, 38, 62],
-      ];
-      for (const [sx, sy, ex, ey] of branches) {
-        g.beginPath();
-        g.moveTo(sx, sy);
-        g.quadraticCurveTo((sx + ex) * 0.55, sy + 6, ex, ey);
-        g.stroke();
-      }
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("Arteriae · Systema vasorum", 0, 96);
-      g.restore();
+    if (ap2) {
+      // Left page: full Sinelnikov page (CNS text columns + brainstem figure + caption)
+      drawImageFitMultiply(p2.g, ap2, 0, 0, ap2.width, ap2.height, 26, 48, 388, 456);
+      // Right page: large magnified view of the brainstem & cranial nerves (Рис. 926)
+      drawImageFitMultiply(
+        p2.g,
+        ap2,
+        Math.round(ap2.width * 0.08),
+        Math.round(ap2.height * 0.34),
+        Math.round(ap2.width * 0.84),
+        Math.round(ap2.height * 0.62),
+        466,
+        28,
+        388,
+        472
+      );
     }
+    finishParchmentSpread(p2.g, W, H, "II");
 
-    // Plate III: Skeletal Hand (left) + Forearm Muscles (right)
+    // Plate III: Uploaded Image 3 (49. Череп, cranium; вид справа)
     const p3 = createParchmentPage(W, H, "III");
-    {
-      const g = p3.g;
-      // Left page: Hand bones (Ossa manus)
-      g.save();
-      g.translate(110, 148);
-      g.strokeStyle = "#3a1e0e";
-      g.lineWidth = 1.9;
-      const fingers = [-0.55, -0.24, 0.0, 0.24, 0.46];
-      const lengths = [42, 68, 76, 70, 56];
-      for (let i = 0; i < fingers.length; i++) {
-        const ang = fingers[i];
-        const len = lengths[i];
-        const ux = Math.sin(ang);
-        const uy = -Math.cos(ang);
-        g.beginPath();
-        g.moveTo(ux * 12, uy * 12 + 12);
-        g.lineTo(ux * len, uy * len + 12);
-        g.stroke();
-        // Joint knuckles
-        for (const f of [0.45, 0.72, 0.96]) {
-          g.beginPath();
-          g.arc(ux * len * f, uy * len * f + 12, 2.2, 0, Math.PI * 2);
-          g.fillStyle = "#e5cda0";
-          g.fill();
-          g.stroke();
-        }
-      }
-      // Wrist carpals
-      g.fillStyle = "rgba(170, 130, 78, 0.45)";
-      g.beginPath();
-      g.roundRect(-18, 12, 36, 22, 6);
-      g.fill();
-      g.stroke();
-
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("Ossa manus · Phalanges", 0, 74);
-      g.restore();
-
-      // Right page: Muscular fibers & Golden Divider
-      g.save();
-      g.translate(332, 130);
-      g.fillStyle = "rgba(154, 62, 46, 0.34)";
-      g.strokeStyle = "#5c2418";
-      g.lineWidth = 1.7;
-      for (let k = -1; k <= 1; k++) {
-        g.beginPath();
-        g.ellipse(k * 18, 0, 12, 48, k * 0.14, 0, Math.PI * 2);
-        g.fill();
-        g.stroke();
-        // Striations
-        g.lineWidth = 0.85;
-        for (let y = -34; y <= 34; y += 11) {
-          g.beginPath();
-          g.moveTo(k * 18 - 7, y);
-          g.lineTo(k * 18 + 7, y + 4);
-          g.stroke();
-        }
-        g.lineWidth = 1.7;
-      }
-      g.fillStyle = "#5c3018";
-      g.font = "italic 11px Georgia, serif";
-      g.textAlign = "center";
-      g.fillText("Musculi · Myologia", 0, 92);
-      g.restore();
+    if (ap3) {
+      // Left page: full Sinelnikov page (Ossa skeleti axialis header + skull + caption)
+      drawImageFitMultiply(p3.g, ap3, 0, 0, ap3.width, ap3.height, 26, 48, 388, 456);
+      // Right page: large magnified view of the colored skull (49. Череп, cranium; вид справа)
+      drawImageFitMultiply(
+        p3.g,
+        ap3,
+        Math.round(ap3.width * 0.1),
+        Math.round(ap3.height * 0.26),
+        Math.round(ap3.width * 0.82),
+        Math.round(ap3.height * 0.56),
+        466,
+        28,
+        388,
+        472
+      );
     }
+    finishParchmentSpread(p3.g, W, H, "III");
 
     return [p1.c, p2.c, p3.c];
   }
 
   class DeskBook {
     /** Interactive flat-lying desk volume ("Атлас анатомии человека") that opens into an illustrated spread. */
-    constructor(meta, img) {
+    constructor(meta, img, plateImgs = []) {
       this.meta = meta;
       this.img = img;
       this.x1 = meta.x1;
@@ -2188,7 +2006,7 @@
 
       this.plateIndex = 0;
       this.flipAnim = 0;
-      this.plates = buildAtlasPlates();
+      this.plates = buildAtlasPlates(plateImgs);
     }
 
     nextPlate() {
@@ -3198,10 +3016,15 @@
         })
       );
 
-      // Load interactive desk atlas ("Атлас анатомии человека")
+      // Load interactive desk atlas ("Атлас анатомии человека") with the 3 uploaded Sinelnikov plates
       if (this.bundle.deskBook && imgs.desk_book) {
-        const dbImg = await loadImage(imgs.desk_book);
-        this.deskBook = new DeskBook(this.bundle.deskBook, dbImg);
+        const [dbImg, ap1, ap2, ap3] = await Promise.all([
+          loadImage(imgs.desk_book),
+          loadImage(imgs.atlas_plate_1 || "assets/atlas_plate_1.jpg"),
+          loadImage(imgs.atlas_plate_2 || "assets/atlas_plate_2.jpg"),
+          loadImage(imgs.atlas_plate_3 || "assets/atlas_plate_3.jpg"),
+        ]);
+        this.deskBook = new DeskBook(this.bundle.deskBook, dbImg, [ap1, ap2, ap3]);
       }
 
       this.resizeCanvas();

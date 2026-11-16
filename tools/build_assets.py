@@ -770,8 +770,10 @@ def main():
     }
 
     def b64(path):
+        ext = os.path.splitext(path)[1].lower()
+        mime = "image/jpeg" if ext in (".jpg", ".jpeg") else "image/png"
         with open(path, "rb") as f:
-            return "data:image/png;base64," + base64.b64encode(f.read()).decode("ascii")
+            return f"data:{mime};base64," + base64.b64encode(f.read()).decode("ascii")
 
     bundle["images"]["bg_study"] = b64(os.path.join(OUT_DIR, "bg_study.png"))
     bundle["images"]["gentleman_fg"] = b64(os.path.join(OUT_DIR, "gentleman_fg.png"))
@@ -780,6 +782,10 @@ def main():
     bundle["images"]["hg_front"] = b64(os.path.join(OUT_DIR, "hg_front.png"))
     bundle["images"]["hg_mask"] = b64(os.path.join(OUT_DIR, "hg_mask.png"))
     bundle["images"]["hg_glass"] = b64(os.path.join(OUT_DIR, "hg_glass.png"))
+    for k in (1, 2, 3):
+        ap_path = os.path.join(OUT_DIR, f"atlas_plate_{k}.jpg")
+        if os.path.exists(ap_path):
+            bundle["images"][f"atlas_plate_{k}"] = b64(ap_path)
     for p in PLANETS:
         bundle["images"][f"planet_{p['id']}_tex"] = b64(
             os.path.join(OUT_DIR, f"planet_{p['id']}_tex.png")
