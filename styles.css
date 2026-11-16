@@ -892,6 +892,333 @@ body {
   max-width: 960px;
 }
 
+/* =========================================================
+   Section 2.5: INTERACTIVE ARCHIVAL ILLUSTRATIONS GALLERY
+   ========================================================= */
+.dg-gallery {
+  padding: 88px 0 104px;
+  border-top: 1px solid rgba(235, 220, 190, 0.06);
+  background:
+    radial-gradient(circle at 22% 18%, rgba(198, 160, 96, 0.07) 0%, rgba(18, 17, 13, 0) 50%),
+    #12110d;
+}
+
+.dg-gallery-header {
+  display: grid;
+  grid-template-columns: minmax(320px, 480px) minmax(360px, 620px);
+  justify-content: space-between;
+  align-items: end;
+  gap: 48px;
+  margin-bottom: 56px;
+}
+
+.dg-gallery-sub {
+  margin: 0 0 26px;
+  font-size: 15.5px;
+  line-height: 1.75;
+  color: #8d8578;
+}
+
+.dg-gallery-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.dg-filter-btn {
+  appearance: none;
+  border: 1px solid rgba(235, 220, 190, 0.12);
+  background: #171511;
+  color: #9e9484;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.dg-filter-btn:hover {
+  color: #efe9dc;
+  border-color: rgba(203, 176, 122, 0.38);
+}
+
+.dg-filter-btn.active {
+  color: #16110a;
+  background: linear-gradient(135deg, #ebd29d 0%, #c7a263 100%);
+  border-color: rgba(255, 238, 198, 0.55);
+}
+
+.dg-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+}
+
+.dg-plate-card {
+  background: #171511;
+  border: 1px solid rgba(235, 220, 190, 0.09);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transition: transform 0.28s cubic-bezier(0.22, 1, 0.36, 1), border-color 0.28s ease, box-shadow 0.28s ease;
+  outline: none;
+}
+
+.dg-plate-card.hidden {
+  display: none;
+}
+
+.dg-plate-card:hover,
+.dg-plate-card:focus-visible {
+  transform: translateY(-5px);
+  border-color: rgba(203, 176, 122, 0.44);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.68), 0 0 0 1px rgba(203, 176, 122, 0.16);
+}
+
+.dg-plate-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 640 / 440;
+  background: #120f0b;
+  overflow: hidden;
+  border-bottom: 1px solid rgba(235, 220, 190, 0.08);
+}
+
+.dg-plate-canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.dg-plate-card:hover .dg-plate-canvas {
+  transform: scale(1.035);
+}
+
+.dg-plate-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  padding: 4px 9px;
+  background: rgba(16, 13, 9, 0.84);
+  border: 1px solid rgba(203, 176, 122, 0.34);
+  color: #cbb07a;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  backdrop-filter: blur(4px);
+}
+
+.dg-plate-zoom-hint {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 5px 10px;
+  background: rgba(16, 13, 9, 0.88);
+  border: 1px solid rgba(203, 176, 122, 0.42);
+  color: #efe9dc;
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.dg-plate-card:hover .dg-plate-zoom-hint,
+.dg-plate-card:focus-visible .dg-plate-zoom-hint {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.dg-plate-info {
+  padding: 20px 22px 24px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.dg-plate-cat {
+  font-size: 9.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #b89a64;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.dg-plate-title {
+  margin: 0 0 10px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-weight: 600;
+  font-size: 23px;
+  line-height: 1.2;
+  color: #efe9dc;
+}
+
+.dg-plate-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: #847c6f;
+}
+
+/* Archival Lightbox Modal */
+.dg-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.dg-lightbox.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.dg-lightbox-backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(8, 7, 5, 0.88);
+  backdrop-filter: blur(10px);
+}
+
+.dg-lightbox-dialog {
+  position: relative;
+  z-index: 2;
+  width: min(920px, calc(100vw - 36px));
+  background: #171511;
+  border: 1px solid rgba(203, 176, 122, 0.36);
+  box-shadow: 0 32px 90px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+.dg-lightbox-top {
+  padding: 14px 20px;
+  border-bottom: 1px solid rgba(235, 220, 190, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.dg-lightbox-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.dg-lightbox-roman {
+  padding: 3px 9px;
+  background: rgba(203, 176, 122, 0.14);
+  border: 1px solid rgba(203, 176, 122, 0.35);
+  color: #ffe2a3;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+}
+
+.dg-lightbox-cat {
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  color: #b89a64;
+  text-transform: uppercase;
+}
+
+.dg-lightbox-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.dg-lb-btn {
+  appearance: none;
+  width: 32px;
+  height: 32px;
+  border: 1px solid rgba(235, 220, 190, 0.16);
+  background: #1e1b16;
+  color: #efe9dc;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.18s ease, color 0.18s ease, background-color 0.18s ease;
+}
+
+.dg-lb-btn:hover {
+  border-color: #cbb07a;
+  color: #ffe2a3;
+  background: #27221b;
+}
+
+.dg-lightbox-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 640 / 440;
+  max-height: 62vh;
+  background: #100d09;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+#lightboxCanvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.dg-lightbox-footer {
+  padding: 18px 24px 20px;
+  border-top: 1px solid rgba(235, 220, 190, 0.08);
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.dg-lightbox-title {
+  margin: 0 0 6px;
+  font-family: "Cormorant Garamond", Georgia, serif;
+  font-style: italic;
+  font-size: 26px;
+  color: #efe9dc;
+}
+
+.dg-lightbox-desc {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #968d7f;
+  max-width: 640px;
+}
+
+.dg-lightbox-code {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  color: #6e675b;
+  white-space: nowrap;
+}
+
 /* Section 3: INQUIRIES & CONVERSATION */
 .dg-inquiries {
   padding: 84px 0 110px;
@@ -1010,9 +1337,13 @@ body {
 }
 
 @media (max-width: 980px) {
-  .dg-craft-grid {
+  .dg-craft-grid,
+  .dg-gallery-header {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 36px;
+  }
+  .dg-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
   }
   .dg-craft-right {
     padding-top: 0;
@@ -1050,9 +1381,14 @@ body {
     grid-template-columns: 1fr;
     gap: 20px;
   }
-  .dg-pillars {
+  .dg-pillars,
+  .dg-gallery-grid {
     grid-template-columns: 1fr;
     gap: 22px;
+  }
+  .dg-lightbox-footer {
+    flex-direction: column;
+    align-items: flex-start;
   }
   .dg-quote-card--wide,
   .dg-quote-card--compact {

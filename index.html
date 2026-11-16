@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=13" />
+  <link rel="stylesheet" href="styles.css?v=14" />
 </head>
 <body>
   <!-- =========================================================
@@ -25,6 +25,7 @@
         <a href="#study" class="sand-nav-link" data-i18n="nav_study">КАБИНЕТ</a>
         <a href="#craft" class="sand-nav-link" data-i18n="nav_craft">МАСТЕРСТВО</a>
         <a href="#wisdom" class="sand-nav-link" data-i18n="nav_wisdom">МУДРОСТЬ</a>
+        <a href="#gallery" class="sand-nav-link" data-i18n="nav_gallery">ИЛЛЮСТРАЦИИ</a>
         <a href="#inquiries" class="sand-nav-link" data-i18n="nav_inquiries">ДИАЛОГ</a>
       </nav>
 
@@ -188,6 +189,169 @@
       </div>
     </section>
 
+    <!-- Section 2.5: INTERACTIVE ARCHIVAL ILLUSTRATIONS GALLERY -->
+    <section id="gallery" class="dg-section dg-gallery">
+      <div class="dg-container">
+        <div class="dg-gallery-header">
+          <div class="dg-gallery-title-col">
+            <div class="dg-eyebrow">
+              <span class="dg-eyebrow-line"></span>
+              <span class="dg-eyebrow-text" data-i18n="gal_eyebrow">АРХИВ КАБИНЕТА · ИЛЛЮСТРАЦИИ</span>
+            </div>
+
+            <h2 class="dg-heading">
+              <span class="dg-heading-sans" data-i18n="gal_h2_1">Гравюры</span>
+              <em class="dg-heading-serif" data-i18n="gal_h2_2">Вечности</em>
+              <span class="dg-heading-sans" data-i18n="gal_h2_3">и Этюды Сфер.</span>
+            </h2>
+          </div>
+
+          <div class="dg-gallery-meta-col">
+            <p class="dg-gallery-sub" data-i18n="gal_sub">
+              Листы из закрытого архива Dr. Gii: небесная механика сфер, анатомические штудии,
+              хронометрия песка и геометрия стиха. Нажмите на любую гравюру, чтобы исследовать
+              детали в архивном просмотрщике.
+            </p>
+
+            <div class="dg-gallery-filters" id="galleryFilters" role="tablist" aria-label="Фильтр иллюстраций">
+              <button type="button" class="dg-filter-btn active" data-filter="all" data-i18n="gal_filter_all">ВСЕ ЛИСТЫ (6)</button>
+              <button type="button" class="dg-filter-btn" data-filter="spheres" data-i18n="gal_filter_spheres">ЭТЮДЫ СФЕР</button>
+              <button type="button" class="dg-filter-btn" data-filter="anatomy" data-i18n="gal_filter_anatomy">АНАТОМИЯ И ВРЕМЯ</button>
+              <button type="button" class="dg-filter-btn" data-filter="folios" data-i18n="gal_filter_folios">АРХИВ КАБИНЕТА</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="dg-gallery-grid" id="galleryGrid">
+          <!-- Plate I -->
+          <article class="dg-plate-card" data-category="spheres" data-plate-id="0" tabindex="0" role="button" aria-label="Tabula I">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="0" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA I</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_0_cat">ЭТЮДЫ СФЕР · АСТРОЛЯБИЯ</div>
+              <h3 class="dg-plate-title" data-i18n="plate_0_title">Венера и Небесный Меридиан</h3>
+              <p class="dg-plate-desc" data-i18n="plate_0_desc">
+                Орбитальный этюд Утренней Звезды и Марса в армиллярном кольце с эпициклами и фазами свечения.
+              </p>
+            </div>
+          </article>
+
+          <!-- Plate II -->
+          <article class="dg-plate-card" data-category="anatomy" data-plate-id="1" tabindex="0" role="button" aria-label="Tabula II">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="1" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA II</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_1_cat">АНАТОМИЯ И ВРЕМЯ · ХРОНОМЕТРИЯ</div>
+              <h3 class="dg-plate-title" data-i18n="plate_1_title">Карданный Сосуд Времени</h3>
+              <p class="dg-plate-desc" data-i18n="plate_1_desc">
+                Чертёж барочных песочных часов с золотым сечением колб, осью переворота 180° и воронкой потока.
+              </p>
+            </div>
+          </article>
+
+          <!-- Plate III -->
+          <article class="dg-plate-card" data-category="anatomy" data-plate-id="2" tabindex="0" role="button" aria-label="Tabula III">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="2" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA III</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_2_cat">АНАТОМИЯ И ВРЕМЯ · ОСТЕОЛОГИЯ</div>
+              <h3 class="dg-plate-title" data-i18n="plate_2_title">Архитектура Мысли и Свода</h3>
+              <p class="dg-plate-desc" data-i18n="plate_2_desc">
+                Лист из настольного атласа: пропорции черепного свода и грудной клетки, вписанные в золотую спираль.
+              </p>
+            </div>
+          </article>
+
+          <!-- Plate IV -->
+          <article class="dg-plate-card" data-category="spheres" data-plate-id="3" tabindex="0" role="button" aria-label="Tabula IV">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="3" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA IV</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_3_cat">ЭТЮДЫ СФЕР · ГАРМОНИЯ МИРА</div>
+              <h3 class="dg-plate-title" data-i18n="plate_3_title">Вихревые Пояса Юпитера и Титана</h3>
+              <p class="dg-plate-desc" data-i18n="plate_3_desc">
+                Сравнительная картография облачных поясов гиганта и янтарной дымки Титана с музыкальными интервалами Кеплера.
+              </p>
+            </div>
+          </article>
+
+          <!-- Plate V -->
+          <article class="dg-plate-card" data-category="folios" data-plate-id="4" tabindex="0" role="button" aria-label="Tabula V">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="4" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA V</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_4_cat">АРХИВ КАБИНЕТА · АНГИОЛОГИЯ</div>
+              <h3 class="dg-plate-title" data-i18n="plate_4_title">Древо Ритма и Сердечный Пульс</h3>
+              <p class="dg-plate-desc" data-i18n="plate_4_desc">
+                Анатомическая гравюра сосудистого древа и акустической волны пульса на пересечении поэзии и мелодии.
+              </p>
+            </div>
+          </article>
+
+          <!-- Plate VI -->
+          <article class="dg-plate-card" data-category="folios" data-plate-id="5" tabindex="0" role="button" aria-label="Tabula VI">
+            <div class="dg-plate-frame">
+              <canvas class="dg-plate-canvas" data-plate-canvas="5" width="640" height="440"></canvas>
+              <div class="dg-plate-badge">TABULA VI</div>
+              <div class="dg-plate-zoom-hint" data-i18n="gal_open_hint">✦ ОТКРЫТЬ ЛИСТ</div>
+            </div>
+            <div class="dg-plate-info">
+              <div class="dg-plate-cat" data-i18n="plate_5_cat">АРХИВ КАБИНЕТА · КОСМОГРАФИЯ</div>
+              <h3 class="dg-plate-title" data-i18n="plate_5_title">Галереи Вавилонской Библиотеки</h3>
+              <p class="dg-plate-desc" data-i18n="plate_5_desc">
+                Шестигранная перспектива бесконечного книгохранилища, созвездий Омара Хайяма и рукописных черновиков.
+              </p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Archival Lightbox Modal for Inspecting Plates -->
+    <div id="galleryLightbox" class="dg-lightbox" aria-hidden="true" role="dialog" aria-modal="true">
+      <div class="dg-lightbox-backdrop" id="lightboxBackdrop"></div>
+      <div class="dg-lightbox-dialog">
+        <div class="dg-lightbox-top">
+          <div class="dg-lightbox-meta">
+            <span id="lbRoman" class="dg-lightbox-roman">TABULA I</span>
+            <span id="lbCat" class="dg-lightbox-cat">ЭТЮДЫ СФЕР</span>
+          </div>
+          <div class="dg-lightbox-controls">
+            <button type="button" id="lbPrev" class="dg-lb-btn" aria-label="Предыдущий лист">‹</button>
+            <button type="button" id="lbNext" class="dg-lb-btn" aria-label="Следующий лист">›</button>
+            <button type="button" id="lbClose" class="dg-lb-btn dg-lb-close" aria-label="Закрыть">×</button>
+          </div>
+        </div>
+
+        <div class="dg-lightbox-stage">
+          <canvas id="lightboxCanvas" width="960" height="660"></canvas>
+        </div>
+
+        <div class="dg-lightbox-footer">
+          <div>
+            <h3 id="lbTitle" class="dg-lightbox-title">Венера и Небесный Меридиан</h3>
+            <p id="lbDesc" class="dg-lightbox-desc"></p>
+          </div>
+          <div id="lbArchiveCode" class="dg-lightbox-code">ARCHIVE · MS-GII-01</div>
+        </div>
+      </div>
+    </div>
+
     <!-- Section 3: INQUIRIES & CONVERSATION (2026-11-16_02-09-27.png) -->
     <section id="inquiries" class="dg-section dg-inquiries">
       <div class="dg-container dg-inquiries-inner">
@@ -249,6 +413,6 @@
   </div>
 
   <script src="assets/scene_bundle.js?v=5"></script>
-  <script src="motion.js?v=9"></script>
+  <script src="motion.js?v=10"></script>
 </body>
 </html>

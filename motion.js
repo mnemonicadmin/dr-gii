@@ -601,6 +601,7 @@
       nav_study: "КАБИНЕТ",
       nav_craft: "МАСТЕРСТВО",
       nav_wisdom: "МУДРОСТЬ",
+      nav_gallery: "ИЛЛЮСТРАЦИИ",
       nav_inquiries: "ДИАЛОГ",
       scroll_cue: "DR. GII · МАСТЕРСТВО",
       craft_eyebrow: "МАСТЕРСТВО",
@@ -622,6 +623,41 @@
       pillar_2_desc: "Написано сейчас, звучит вечно — укоренено в извечном поиске человека.",
       wisdom_quote:
         "Время, которое убегает от нас — как песок. У кого-то он пройдет сквозь пальцы, а мудрец из песка создаст свою пирамиду на тысячелетия. Прикоснитесь к мудрости, ведь это самое ценное из чудес.",
+      gal_eyebrow: "АРХИВ КАБИНЕТА · ИЛЛЮСТРАЦИИ",
+      gal_h2_1: "Гравюры",
+      gal_h2_2: "Вечности",
+      gal_h2_3: "и Этюды Сфер.",
+      gal_sub:
+        "Листы из закрытого архива Dr. Gii: небесная механика сфер, анатомические штудии, хронометрия песка и геометрия стиха. Нажмите на любую гравюру, чтобы исследовать детали в архивном просмотрщике.",
+      gal_filter_all: "ВСЕ ЛИСТЫ (6)",
+      gal_filter_spheres: "ЭТЮДЫ СФЕР",
+      gal_filter_anatomy: "АНАТОМИЯ И ВРЕМЯ",
+      gal_filter_folios: "АРХИВ КАБИНЕТА",
+      gal_open_hint: "✦ ОТКРЫТЬ ЛИСТ",
+      plate_0_cat: "ЭТЮДЫ СФЕР · АСТРОЛЯБИЯ",
+      plate_0_title: "Венера и Небесный Меридиан",
+      plate_0_desc:
+        "Орбитальный этюд Утренней Звезды и Марса в армиллярном кольце с эпициклами и фазами свечения.",
+      plate_1_cat: "АНАТОМИЯ И ВРЕМЯ · ХРОНОМЕТРИЯ",
+      plate_1_title: "Карданный Сосуд Времени",
+      plate_1_desc:
+        "Чертёж барочных песочных часов с золотым сечением колб, осью переворота 180° и воронкой потока.",
+      plate_2_cat: "АНАТОМИЯ И ВРЕМЯ · ОСТЕОЛОГИЯ",
+      plate_2_title: "Архитектура Мысли и Свода",
+      plate_2_desc:
+        "Лист из настольного атласа: пропорции черепного свода и грудной клетки, вписанные в золотую спираль.",
+      plate_3_cat: "ЭТЮДЫ СФЕР · ГАРМОНИЯ МИРА",
+      plate_3_title: "Вихревые Пояса Юпитера и Титана",
+      plate_3_desc:
+        "Сравнительная картография облачных поясов гиганта и янтарной дымки Титана с музыкальными интервалами Кеплера.",
+      plate_4_cat: "АРХИВ КАБИНЕТА · АНГИОЛОГИЯ",
+      plate_4_title: "Древо Ритма и Сердечный Пульс",
+      plate_4_desc:
+        "Анатомическая гравюра сосудистого древа и акустической волны пульса на пересечении поэзии и мелодии.",
+      plate_5_cat: "АРХИВ КАБИНЕТА · КОСМОГРАФИЯ",
+      plate_5_title: "Галереи Вавилонской Библиотеки",
+      plate_5_desc:
+        "Шестигранная перспектива бесконечного книгохранилища, созвездий Омара Хайяма и рукописных черновиков.",
       inq_eyebrow: "ВОПРОСЫ И ДИАЛОГ",
       inq_h2_1: "Если слово",
       inq_h2_2: "нашло вас —",
@@ -636,6 +672,7 @@
       nav_study: "THE STUDY",
       nav_craft: "THE CRAFT",
       nav_wisdom: "WISDOM",
+      nav_gallery: "ILLUSTRATIONS",
       nav_inquiries: "CONVERSATION",
       scroll_cue: "DR. GII · THE CRAFT",
       craft_eyebrow: "THE CRAFT",
@@ -657,6 +694,41 @@
       pillar_2_desc: "Written now, felt forever — rooted in the eternal human search.",
       wisdom_quote:
         "Time slipping away from us is like sand. For some, it runs through their fingers — yet a sage will build from that sand a pyramid to stand for millennia. Touch wisdom, for it is the most precious of all wonders.",
+      gal_eyebrow: "STUDY ARCHIVE · ILLUSTRATIONS",
+      gal_h2_1: "Engravings of",
+      gal_h2_2: "Eternity",
+      gal_h2_3: "& Sphere Studies.",
+      gal_sub:
+        "Folio plates from the private archive of Dr. Gii: celestial mechanics, anatomical studies, sand chronometry, and the geometry of verse. Click any plate to inspect it in the archival viewer.",
+      gal_filter_all: "ALL PLATES (6)",
+      gal_filter_spheres: "SPHERE STUDIES",
+      gal_filter_anatomy: "ANATOMY & TIME",
+      gal_filter_folios: "STUDY ARCHIVE",
+      gal_open_hint: "✦ INSPECT PLATE",
+      plate_0_cat: "SPHERE STUDIES · ASTROLABE",
+      plate_0_title: "Venus & The Celestial Meridian",
+      plate_0_desc:
+        "Orbital study of the Morning Star and Mars inside an armillary ring with retrograde epicycles and phase crescents.",
+      plate_1_cat: "ANATOMY & TIME · CHRONOMETRY",
+      plate_1_title: "Gimbal Vessel of Time",
+      plate_1_desc:
+        "Architectural plate of the baroque hourglass showing golden-ratio bulbs, the 180° gimbal axis, and sand vortex trajectories.",
+      plate_2_cat: "ANATOMY & TIME · OSTEOLOGY",
+      plate_2_title: "Architecture of Thought & Vault",
+      plate_2_desc:
+        "Folio from the desk atlas: proportions of the cranial vault and ribcage inscribed within a golden Fibonacci spiral.",
+      plate_3_cat: "SPHERE STUDIES · HARMONIA MUNDI",
+      plate_3_title: "Vortex Belts of Jupiter & Titan",
+      plate_3_desc:
+        "Comparative cartography of Jupiter's cloud bands and Titan's amber haze paired with Kepler's musical intervals.",
+      plate_4_cat: "STUDY ARCHIVE · ANGIOLOGY",
+      plate_4_title: "Tree of Rhythm & Cardiac Pulse",
+      plate_4_desc:
+        "Anatomical engraving of the vascular tree and acoustic pulse wave at the intersection of poetry and melody.",
+      plate_5_cat: "STUDY ARCHIVE · COSMOGRAPHY",
+      plate_5_title: "Galleries of the Library of Babel",
+      plate_5_desc:
+        "Hexagonal perspective of the infinite book sanctuary, Omar Khayyam's constellations, and manuscript drafts.",
       inq_eyebrow: "INQUIRIES & CONVERSATION",
       inq_h2_1: "If a word",
       inq_h2_2: "found you —",
@@ -1109,6 +1181,672 @@
         ctx.arc(g.x, g.y, g.r, 0, Math.PI * 2);
         ctx.fill();
       }
+    }
+  }
+
+  // =========================================================
+  // Interactive Archival Illustrations Gallery & Lightbox
+  // =========================================================
+  class ArchivalGallery {
+    constructor(assets = {}) {
+      this.assets = assets;
+      this.lang = document.documentElement.lang || "ru";
+      this.activePlate = 0;
+      this.isOpen = false;
+
+      this.plateMeta = [
+        { roman: "TABULA I", code: "ARCHIVE · MS-GII-01", latin: "VENUS ET MERIDIANUS COELESTIS" },
+        { roman: "TABULA II", code: "ARCHIVE · MS-GII-02", latin: "CLEPSYDRA ARENA · RATIO AUREA" },
+        { roman: "TABULA III", code: "ARCHIVE · MS-GII-03", latin: "ARCHITECTURA CRANII ET THORACIS" },
+        { roman: "TABULA IV", code: "ARCHIVE · MS-GII-04", latin: "JUPITER ET TITAN · HARMONIA" },
+        { roman: "TABULA V", code: "ARCHIVE · MS-GII-05", latin: "ARBOR ARTERIARUM ET PULSUS" },
+        { roman: "TABULA VI", code: "ARCHIVE · MS-GII-06", latin: "BIBLIOTHECA HEXAGONALIS" },
+      ];
+
+      this.renderAllThumbnails();
+      this.bindEvents();
+    }
+
+    setLanguage(lang) {
+      this.lang = lang;
+      if (this.isOpen) {
+        this.updateLightboxText(this.activePlate);
+      }
+    }
+
+    renderAllThumbnails() {
+      const canvases = document.querySelectorAll("[data-plate-canvas]");
+      canvases.forEach((c) => {
+        const idx = parseInt(c.getAttribute("data-plate-canvas"), 10) || 0;
+        const ctx = c.getContext("2d");
+        this.drawPlate(ctx, c.width, c.height, idx);
+      });
+    }
+
+    bindEvents() {
+      const filterBtns = Array.from(document.querySelectorAll("#galleryFilters .dg-filter-btn"));
+      const cards = Array.from(document.querySelectorAll("#galleryGrid .dg-plate-card"));
+
+      filterBtns.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const f = btn.getAttribute("data-filter");
+          filterBtns.forEach((b) => b.classList.toggle("active", b === btn));
+          cards.forEach((card) => {
+            const cat = card.getAttribute("data-category");
+            const show = f === "all" || cat === f;
+            card.classList.toggle("hidden", !show);
+          });
+        });
+      });
+
+      cards.forEach((card) => {
+        const idx = parseInt(card.getAttribute("data-plate-id"), 10) || 0;
+        card.addEventListener("click", () => this.openLightbox(idx));
+        card.addEventListener("keydown", (e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            this.openLightbox(idx);
+          }
+        });
+      });
+
+      this.lightbox = document.getElementById("galleryLightbox");
+      this.lbCanvas = document.getElementById("lightboxCanvas");
+      if (!this.lightbox || !this.lbCanvas) return;
+
+      document.getElementById("lbClose").addEventListener("click", () => this.closeLightbox());
+      document.getElementById("lightboxBackdrop").addEventListener("click", () => this.closeLightbox());
+      document.getElementById("lbPrev").addEventListener("click", () => {
+        this.openLightbox((this.activePlate + 5) % 6);
+      });
+      document.getElementById("lbNext").addEventListener("click", () => {
+        this.openLightbox((this.activePlate + 1) % 6);
+      });
+
+      window.addEventListener("keydown", (e) => {
+        if (!this.isOpen) return;
+        if (e.key === "Escape") this.closeLightbox();
+        else if (e.key === "ArrowLeft") this.openLightbox((this.activePlate + 5) % 6);
+        else if (e.key === "ArrowRight") this.openLightbox((this.activePlate + 1) % 6);
+      });
+    }
+
+    openLightbox(idx) {
+      if (!this.lightbox || !this.lbCanvas) return;
+      this.activePlate = idx;
+      this.isOpen = true;
+      const ctx = this.lbCanvas.getContext("2d");
+      this.drawPlate(ctx, this.lbCanvas.width, this.lbCanvas.height, idx);
+      this.updateLightboxText(idx);
+      this.lightbox.classList.add("open");
+      this.lightbox.setAttribute("aria-hidden", "false");
+    }
+
+    updateLightboxText(idx) {
+      const dict = I18N_PAGE[this.lang] || I18N_PAGE.ru;
+      const meta = this.plateMeta[idx] || this.plateMeta[0];
+      document.getElementById("lbRoman").textContent = meta.roman;
+      document.getElementById("lbCat").textContent = dict[`plate_${idx}_cat`] || "";
+      document.getElementById("lbTitle").textContent = dict[`plate_${idx}_title`] || "";
+      document.getElementById("lbDesc").textContent = dict[`plate_${idx}_desc`] || "";
+      document.getElementById("lbArchiveCode").textContent = meta.code;
+    }
+
+    closeLightbox() {
+      if (!this.lightbox) return;
+      this.isOpen = false;
+      this.lightbox.classList.remove("open");
+      this.lightbox.setAttribute("aria-hidden", "true");
+    }
+
+    drawBaseFolio(g, W, H, meta) {
+      const bg = g.createRadialGradient(W * 0.5, H * 0.46, 20, W * 0.5, H * 0.5, W * 0.65);
+      bg.addColorStop(0, "#241c13");
+      bg.addColorStop(0.58, "#18130d");
+      bg.addColorStop(1, "#100d09");
+      g.fillStyle = bg;
+      g.fillRect(0, 0, W, H);
+
+      // Subtle coordinate grid lines
+      g.strokeStyle = "rgba(214, 176, 112, 0.06)";
+      g.lineWidth = 1;
+      const step = 40;
+      for (let x = step; x < W; x += step) {
+        g.beginPath();
+        g.moveTo(x, 18);
+        g.lineTo(x, H - 18);
+        g.stroke();
+      }
+      for (let y = step; y < H; y += step) {
+        g.beginPath();
+        g.moveTo(18, y);
+        g.lineTo(W - 18, y);
+        g.stroke();
+      }
+
+      // Double gold-sepia archival border
+      g.strokeStyle = "rgba(214, 176, 112, 0.36)";
+      g.lineWidth = 1.2;
+      g.strokeRect(16, 16, W - 32, H - 32);
+      g.strokeStyle = "rgba(214, 176, 112, 0.16)";
+      g.lineWidth = 0.8;
+      g.strokeRect(22, 22, W - 44, H - 44);
+
+      // Corner ornaments
+      const corners = [
+        [22, 22, 1, 1],
+        [W - 22, 22, -1, 1],
+        [22, H - 22, 1, -1],
+        [W - 22, H - 22, -1, -1],
+      ];
+      g.strokeStyle = "rgba(235, 198, 128, 0.55)";
+      g.lineWidth = 1.3;
+      for (const [cx, cy, dx, dy] of corners) {
+        g.beginPath();
+        g.moveTo(cx, cy + dy * 14);
+        g.lineTo(cx, cy);
+        g.lineTo(cx + dx * 14, cy);
+        g.stroke();
+      }
+
+      // Top & Bottom Latin inscription headers
+      g.fillStyle = "rgba(214, 176, 112, 0.68)";
+      g.font = "600 10px 'Plus Jakarta Sans', sans-serif";
+      g.textAlign = "right";
+      g.fillText(meta.code, W - 32, 38);
+      g.textAlign = "center";
+      g.font = "italic 12px 'Cormorant Garamond', Georgia, serif";
+      g.fillStyle = "rgba(232, 202, 146, 0.78)";
+      g.fillText(meta.latin, W * 0.5, H - 30);
+    }
+
+    drawPlate(ctx, W, H, idx) {
+      ctx.save();
+      const scaleX = W / 640;
+      const scaleY = H / 440;
+      ctx.scale(scaleX, scaleY);
+      const w = 640;
+      const h = 440;
+      const meta = this.plateMeta[idx] || this.plateMeta[0];
+      this.drawBaseFolio(ctx, w, h, meta);
+
+      if (idx === 0) this.drawPlateVenusAstrolabe(ctx, w, h);
+      else if (idx === 1) this.drawPlateHourglassStudy(ctx, w, h);
+      else if (idx === 2) this.drawPlateOsteologySpiral(ctx, w, h);
+      else if (idx === 3) this.drawPlateJupiterHarmony(ctx, w, h);
+      else if (idx === 4) this.drawPlateVascularPulse(ctx, w, h);
+      else this.drawPlateBabelHexagons(ctx, w, h);
+
+      ctx.restore();
+    }
+
+    drawPlateVenusAstrolabe(g, W, H) {
+      const cx = W * 0.5;
+      const cy = H * 0.47;
+
+      // Outer graduated astrolabe ring
+      g.strokeStyle = "rgba(228, 188, 118, 0.55)";
+      g.lineWidth = 1.4;
+      for (const r of [142, 132, 98, 62]) {
+        g.beginPath();
+        g.arc(cx, cy, r, 0, Math.PI * 2);
+        g.stroke();
+      }
+
+      // Degree ticks around outer ring
+      for (let a = 0; a < 72; a++) {
+        const ang = (a / 72) * Math.PI * 2;
+        const r1 = a % 6 === 0 ? 126 : 132;
+        const r2 = 142;
+        g.beginPath();
+        g.moveTo(cx + Math.cos(ang) * r1, cy + Math.sin(ang) * r1);
+        g.lineTo(cx + Math.cos(ang) * r2, cy + Math.sin(ang) * r2);
+        g.stroke();
+      }
+
+      // Pentagram of Venus 8:5 orbital resonance rosette
+      g.strokeStyle = "rgba(255, 222, 152, 0.34)";
+      g.lineWidth = 1.0;
+      g.beginPath();
+      for (let i = 0; i <= 360; i++) {
+        const t = (i / 360) * Math.PI * 2 * 5;
+        const r = 78 + 38 * Math.cos((8 / 5) * t);
+        const x = cx + Math.cos(t) * r;
+        const y = cy + Math.sin(t) * r;
+        if (i === 0) g.moveTo(x, y);
+        else g.lineTo(x, y);
+      }
+      g.stroke();
+
+      // Axis crosshairs
+      g.strokeStyle = "rgba(214, 176, 112, 0.25)";
+      g.beginPath();
+      g.moveTo(cx - 165, cy);
+      g.lineTo(cx + 165, cy);
+      g.moveTo(cx, cy - 160);
+      g.lineTo(cx, cy + 160);
+      g.stroke();
+
+      // Central Illuminated Venus Sphere
+      const vGrad = g.createRadialGradient(cx - 14, cy - 14, 4, cx, cy, 44);
+      vGrad.addColorStop(0, "#fff2c6");
+      vGrad.addColorStop(0.45, "#e2b668");
+      vGrad.addColorStop(0.82, "#9a6c2e");
+      vGrad.addColorStop(1, "#3d2710");
+      g.fillStyle = vGrad;
+      g.beginPath();
+      g.arc(cx, cy, 44, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = "#ffe3a3";
+      g.lineWidth = 1.3;
+      g.stroke();
+
+      // Sulfuric cloud bands across Venus
+      g.strokeStyle = "rgba(255, 244, 210, 0.38)";
+      g.lineWidth = 1.1;
+      for (const dy of [-18, -6, 7, 19]) {
+        const chord = Math.sqrt(Math.max(0, 42 * 42 - dy * dy));
+        g.beginPath();
+        g.moveTo(cx - chord, cy + dy);
+        g.quadraticCurveTo(cx, cy + dy + 6, cx + chord, cy + dy);
+        g.stroke();
+      }
+
+      // Orbiting Mars satellite on outer ring
+      const mx = cx + Math.cos(-0.65) * 115;
+      const my = cy + Math.sin(-0.65) * 115;
+      const mGrad = g.createRadialGradient(mx - 5, my - 5, 2, mx, my, 18);
+      mGrad.addColorStop(0, "#f59d6c");
+      mGrad.addColorStop(0.6, "#bd4b24");
+      mGrad.addColorStop(1, "#45180a");
+      g.fillStyle = mGrad;
+      g.beginPath();
+      g.arc(mx, my, 18, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = "#f2a872";
+      g.stroke();
+
+      // 7 Phase crescents along left & right margins
+      for (let i = 0; i < 5; i++) {
+        const py = 92 + i * 56;
+        g.strokeStyle = "rgba(228, 188, 118, 0.5)";
+        g.beginPath();
+        g.arc(76, py, 12, 0, Math.PI * 2);
+        g.stroke();
+        g.fillStyle = "rgba(238, 202, 134, 0.35)";
+        g.beginPath();
+        g.arc(76, py, 12, -Math.PI * 0.5, Math.PI * 0.5);
+        g.fill();
+      }
+    }
+
+    drawPlateHourglassStudy(g, W, H) {
+      const cx = W * 0.36;
+      const cy = H * 0.49;
+
+      // Golden Ratio construction rectangles around hourglass
+      g.strokeStyle = "rgba(228, 188, 118, 0.32)";
+      g.setLineDash([4, 4]);
+      g.strokeRect(cx - 82, cy - 134, 164, 268);
+      g.beginPath();
+      g.arc(cx, cy - 42, 74, 0, Math.PI * 2);
+      g.arc(cx, cy + 42, 74, 0, Math.PI * 2);
+      g.stroke();
+      g.setLineDash([]);
+
+      // Draw actual hourglass assets if loaded
+      if (this.assets.hgBack && this.assets.hgFront && this.assets.hgGlass) {
+        const hw = 152;
+        const hh = 238;
+        const x0 = cx - hw * 0.5;
+        const y0 = cy - hh * 0.5;
+        g.drawImage(this.assets.hgBack, x0, y0, hw, hh);
+        const rw = hw * 0.4746;
+        const rh = hh * 0.6334;
+        const rcx = x0 + hw * 0.5;
+        const rcy = y0 + hh * 0.3172;
+        g.drawImage(this.assets.hgGlass, rcx - rw * 0.5, rcy - rh * 0.5, rw, rh);
+        g.drawImage(this.assets.hgFront, x0, y0, hw, hh);
+      }
+
+      // 180° Gimbal rotation callout arc
+      g.strokeStyle = "rgba(255, 224, 156, 0.72)";
+      g.lineWidth = 1.4;
+      g.beginPath();
+      g.arc(cx, cy - 42, 92, -Math.PI * 0.38, Math.PI * 0.38);
+      g.stroke();
+      g.fillStyle = "#ffe2a3";
+      g.font = "600 11px 'Plus Jakarta Sans', sans-serif";
+      g.textAlign = "left";
+      g.fillText("180° AXIS", cx + 98, cy - 40);
+      g.fillText("Φ = 1.618", cx - 138, cy - 118);
+
+      // Right side: Sand flow vortex & accumulation curve schematic
+      const rx = 380;
+      const ry = 88;
+      const rw = 206;
+      const rh = 248;
+      g.strokeStyle = "rgba(214, 176, 112, 0.42)";
+      g.strokeRect(rx, ry, rw, rh);
+
+      // Funnel & Mound technical curves
+      g.strokeStyle = "#ebd098";
+      g.lineWidth = 1.6;
+      for (let k = 0; k < 4; k++) {
+        const p = (k + 1) / 5;
+        const sy = ry + 26 + p * 72;
+        g.beginPath();
+        g.moveTo(rx + 24, sy);
+        g.quadraticCurveTo(rx + rw * 0.5, sy + 24, rx + rw - 24, sy);
+        g.stroke();
+
+        const by = ry + rh - 18 - p * 68;
+        g.beginPath();
+        g.moveTo(rx + 20, by + 22);
+        g.quadraticCurveTo(rx + rw * 0.5, by - 18, rx + rw - 20, by + 22);
+        g.stroke();
+      }
+      g.strokeStyle = "rgba(255, 232, 172, 0.85)";
+      g.beginPath();
+      g.moveTo(rx + rw * 0.5, ry + 95);
+      g.lineTo(rx + rw * 0.5, ry + rh - 24);
+      g.stroke();
+    }
+
+    drawPlateOsteologySpiral(g, W, H) {
+      const cx = W * 0.34;
+      const cy = H * 0.48;
+
+      // Vitruvian circle & square around cranium
+      g.strokeStyle = "rgba(228, 188, 118, 0.38)";
+      g.lineWidth = 1.2;
+      g.beginPath();
+      g.arc(cx, cy, 122, 0, Math.PI * 2);
+      g.stroke();
+      g.strokeRect(cx - 98, cy - 98, 196, 196);
+
+      // Detailed Cranium Profile Engraving
+      g.save();
+      g.translate(cx, cy + 6);
+      g.strokeStyle = "#ebd098";
+      g.lineWidth = 2.0;
+      g.beginPath();
+      g.arc(0, -24, 58, Math.PI * 0.84, Math.PI * 2.14, false);
+      g.quadraticCurveTo(56, 14, 44, 32);
+      g.lineTo(50, 54);
+      g.lineTo(28, 72);
+      g.lineTo(-14, 68);
+      g.quadraticCurveTo(-46, 44, -52, 4);
+      g.closePath();
+      g.fillStyle = "rgba(218, 178, 112, 0.14)";
+      g.fill();
+      g.stroke();
+
+      // Orbit & Zygomatic arch
+      g.fillStyle = "#17120c";
+      g.beginPath();
+      g.ellipse(22, -8, 14, 12, -0.1, 0, Math.PI * 2);
+      g.fill();
+      g.stroke();
+
+      // Cranial suture hatching
+      g.strokeStyle = "rgba(235, 204, 142, 0.5)";
+      g.lineWidth = 1.0;
+      g.beginPath();
+      g.moveTo(-36, -42);
+      g.quadraticCurveTo(-6, -24, 18, -50);
+      g.stroke();
+      g.restore();
+
+      // Right side: Ribcage & Fibonacci Golden Spiral
+      const rcx = W * 0.72;
+      const rcy = H * 0.48;
+      g.save();
+      g.translate(rcx, rcy);
+      g.strokeStyle = "#e6c788";
+      g.lineWidth = 1.6;
+      // Sternum
+      g.beginPath();
+      g.moveTo(0, -86);
+      g.lineTo(0, 56);
+      g.stroke();
+
+      for (let i = 0; i < 7; i++) {
+        const ry = -72 + i * 20;
+        const rw = 36 + Math.sin((i / 6) * Math.PI) * 44;
+        for (const dir of [-1, 1]) {
+          g.beginPath();
+          g.moveTo(dir * 4, ry);
+          g.bezierCurveTo(dir * rw * 0.65, ry - 8, dir * rw, ry + 8, dir * rw * 0.68, ry + 22);
+          g.stroke();
+        }
+      }
+
+      // Golden spiral overlay
+      g.strokeStyle = "rgba(255, 232, 172, 0.65)";
+      g.lineWidth = 1.3;
+      g.beginPath();
+      for (let t = 0; t <= Math.PI * 3.5; t += 0.08) {
+        const r = 4 * Math.exp(0.28 * t);
+        const x = Math.cos(t) * r;
+        const y = Math.sin(t) * r;
+        if (t === 0) g.moveTo(x, y);
+        else g.lineTo(x, y);
+      }
+      g.stroke();
+      g.restore();
+    }
+
+    drawPlateJupiterHarmony(g, W, H) {
+      const lx = W * 0.31;
+      const rx = W * 0.69;
+      const cy = H * 0.44;
+
+      // Connecting harmonic chords between Jupiter and Titan
+      g.strokeStyle = "rgba(228, 188, 118, 0.28)";
+      g.lineWidth = 1.0;
+      for (let k = -3; k <= 3; k++) {
+        g.beginPath();
+        g.moveTo(lx, cy + k * 24);
+        g.bezierCurveTo(W * 0.5, cy - k * 42, W * 0.5, cy + k * 42, rx, cy + k * 18);
+        g.stroke();
+      }
+
+      // Jupiter Hemisphere
+      const jGrad = g.createRadialGradient(lx - 20, cy - 20, 6, lx, cy, 86);
+      jGrad.addColorStop(0, "#ffe8b6");
+      jGrad.addColorStop(0.55, "#d49a4e");
+      jGrad.addColorStop(1, "#4e3012");
+      g.fillStyle = jGrad;
+      g.beginPath();
+      g.arc(lx, cy, 86, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = "#f2cf8d";
+      g.lineWidth = 1.5;
+      g.stroke();
+
+      // Jupiter bands & Great Vortex
+      g.strokeStyle = "rgba(74, 40, 14, 0.52)";
+      g.lineWidth = 3.2;
+      for (const dy of [-52, -32, -12, 10, 30, 50]) {
+        const ch = Math.sqrt(Math.max(0, 84 * 84 - dy * dy));
+        g.beginPath();
+        g.moveTo(lx - ch, cy + dy);
+        g.lineTo(lx + ch, cy + dy);
+        g.stroke();
+      }
+      g.strokeStyle = "#ffe3a3";
+      g.lineWidth = 1.4;
+      g.beginPath();
+      g.ellipse(lx + 24, cy + 20, 18, 11, 0.1, 0, Math.PI * 2);
+      g.stroke();
+
+      // Titan Amber Sphere
+      const tGrad = g.createRadialGradient(rx - 14, cy - 14, 4, rx, cy, 64);
+      tGrad.addColorStop(0, "#ffe49e");
+      tGrad.addColorStop(0.65, "#c98432");
+      tGrad.addColorStop(1, "#3d220a");
+      g.fillStyle = tGrad;
+      g.beginPath();
+      g.arc(rx, cy, 64, 0, Math.PI * 2);
+      g.fill();
+      g.strokeStyle = "#f2cf8d";
+      g.lineWidth = 1.4;
+      g.stroke();
+
+      // Outer atmospheric halo on Titan
+      g.strokeStyle = "rgba(255, 218, 138, 0.36)";
+      g.setLineDash([3, 3]);
+      g.beginPath();
+      g.arc(rx, cy, 74, 0, Math.PI * 2);
+      g.stroke();
+      g.setLineDash([]);
+
+      // Bottom Keplerian Musical Staff of the Spheres
+      const sy = H - 88;
+      g.strokeStyle = "rgba(228, 188, 118, 0.45)";
+      g.lineWidth = 1.0;
+      for (let line = 0; line < 5; line++) {
+        g.beginPath();
+        g.moveTo(86, sy + line * 7);
+        g.lineTo(W - 86, sy + line * 7);
+        g.stroke();
+      }
+      const notes = [140, 200, 260, 320, 380, 440, 500];
+      notes.forEach((nx, i) => {
+        const ny = sy + ((i * 2) % 5) * 7;
+        g.fillStyle = "#ffe2a3";
+        g.beginPath();
+        g.ellipse(nx, ny, 5, 3.6, -0.3, 0, Math.PI * 2);
+        g.fill();
+      });
+    }
+
+    drawPlateVascularPulse(g, W, H) {
+      const lx = W * 0.3;
+      const cy = H * 0.48;
+
+      // Anatomical Heart & Golden Vascular Tree
+      g.save();
+      g.translate(lx, cy + 16);
+      g.strokeStyle = "#ebd098";
+      g.fillStyle = "rgba(212, 162, 88, 0.16)";
+      g.lineWidth = 2.0;
+      g.beginPath();
+      g.moveTo(-24, -36);
+      g.bezierCurveTo(-58, -32, -62, 24, 4, 72);
+      g.bezierCurveTo(56, 28, 54, -28, 18, -36);
+      g.closePath();
+      g.fill();
+      g.stroke();
+
+      // Branching arterial tree upward
+      const branch = (x, y, len, ang, depth) => {
+        if (depth <= 0) return;
+        const nx = x + Math.cos(ang) * len;
+        const ny = y + Math.sin(ang) * len;
+        g.lineWidth = depth * 0.65;
+        g.beginPath();
+        g.moveTo(x, y);
+        g.lineTo(nx, ny);
+        g.stroke();
+        branch(nx, ny, len * 0.74, ang - 0.42, depth - 1);
+        branch(nx, ny, len * 0.74, ang + 0.38, depth - 1);
+      };
+      g.strokeStyle = "rgba(255, 224, 156, 0.78)";
+      branch(0, -36, 38, -Math.PI * 0.5, 5);
+      g.restore();
+
+      // Right side: Acoustic & Cardiac Pulse Waveform
+      const wx0 = 310;
+      const wx1 = 584;
+      const wy = H * 0.46;
+
+      g.strokeStyle = "rgba(214, 176, 112, 0.32)";
+      g.lineWidth = 1.0;
+      g.beginPath();
+      g.arc(446, wy, 96, 0, Math.PI * 2);
+      g.arc(446, wy, 64, 0, Math.PI * 2);
+      g.stroke();
+
+      g.strokeStyle = "#ffe2a3";
+      g.lineWidth = 2.0;
+      g.beginPath();
+      for (let x = wx0; x <= wx1; x += 2) {
+        const u = (x - wx0) / (wx1 - wx0);
+        const beat =
+          Math.exp(-Math.pow((u - 0.28) * 18, 2)) * -58 +
+          Math.exp(-Math.pow((u - 0.33) * 28, 2)) * 34 +
+          Math.exp(-Math.pow((u - 0.72) * 18, 2)) * -58 +
+          Math.exp(-Math.pow((u - 0.77) * 28, 2)) * 34 +
+          Math.sin(u * Math.PI * 16) * 4;
+        const y = wy + beat;
+        if (x === wx0) g.moveTo(x, y);
+        else g.lineTo(x, y);
+      }
+      g.stroke();
+    }
+
+    drawPlateBabelHexagons(g, W, H) {
+      const cx = W * 0.5;
+      const cy = H * 0.47;
+
+      // Concentric perspective hexagonal galleries of the Library of Babel
+      const drawHex = (x, y, r, rot = 0) => {
+        g.beginPath();
+        for (let i = 0; i < 6; i++) {
+          const a = rot + (i / 6) * Math.PI * 2;
+          const hx = x + Math.cos(a) * r;
+          const hy = y + Math.sin(a) * r;
+          if (i === 0) g.moveTo(hx, hy);
+          else g.lineTo(hx, hy);
+        }
+        g.closePath();
+        g.stroke();
+      };
+
+      const radii = [150, 116, 86, 60, 38, 20];
+      radii.forEach((r, idx) => {
+        g.strokeStyle = `rgba(235, 198, 128, ${0.75 - idx * 0.09})`;
+        g.lineWidth = idx === 0 ? 1.8 : 1.2;
+        drawHex(cx, cy, r, Math.PI / 6);
+      });
+
+      // Radial gallery perspective spokes connecting hexagon vertices
+      g.strokeStyle = "rgba(214, 176, 112, 0.42)";
+      g.lineWidth = 1.1;
+      for (let i = 0; i < 6; i++) {
+        const a = Math.PI / 6 + (i / 6) * Math.PI * 2;
+        g.beginPath();
+        g.moveTo(cx + Math.cos(a) * 20, cy + Math.sin(a) * 20);
+        g.lineTo(cx + Math.cos(a) * 150, cy + Math.sin(a) * 150);
+        g.stroke();
+      }
+
+      // Flanking satellite hexagons & constellation stars
+      for (const dir of [-1, 1]) {
+        const sx = cx + dir * 206;
+        g.strokeStyle = "rgba(228, 188, 118, 0.45)";
+        drawHex(sx, cy - 52, 42, 0);
+        drawHex(sx, cy + 52, 42, 0);
+
+        g.fillStyle = "#ffe3a3";
+        for (const dy of [-52, 0, 52]) {
+          g.beginPath();
+          g.arc(sx, cy + dy, 3, 0, Math.PI * 2);
+          g.fill();
+        }
+      }
+
+      // Central luminous star of wisdom
+      const sGrad = g.createRadialGradient(cx, cy, 2, cx, cy, 26);
+      sGrad.addColorStop(0, "#fff4d2");
+      sGrad.addColorStop(0.5, "rgba(238, 192, 108, 0.45)");
+      sGrad.addColorStop(1, "rgba(238, 192, 108, 0)");
+      g.fillStyle = sGrad;
+      g.beginPath();
+      g.arc(cx, cy, 26, 0, Math.PI * 2);
+      g.fill();
     }
   }
 
@@ -2410,6 +3148,9 @@
       if (this.activeDossierBook) {
         this.openDossier(this.activeDossierBook);
       }
+      if (this.gallery) {
+        this.gallery.setLanguage(lang);
+      }
     }
 
     async loadAndStart() {
@@ -2425,6 +3166,7 @@
       this.bgStudyImg = bgImg;
       this.manFgImg = manImg;
       this.hourglass.setAssets(hgBack, hgFront, hgMask, hgGlass);
+      this.gallery = new ArchivalGallery({ hgBack, hgFront, hgGlass });
 
       // Pre-render midnight-tinted gentleman sprite cleanly (no rectangular artifacts!)
       const manNight = document.createElement("canvas");
