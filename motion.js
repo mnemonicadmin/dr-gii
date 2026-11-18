@@ -598,10 +598,8 @@
   // =========================================================
   const I18N_PAGE = {
     ru: {
-      nav_study: "КАБИНЕТ",
-      nav_craft: "МАСТЕРСТВО",
-      nav_wisdom: "МУДРОСТЬ",
-      nav_gallery: "ИЛЛЮСТРАЦИИ",
+      nav_intro: "ЗНАКОМСТВО",
+      nav_lab: "ПРОЕКТНАЯ ЛАБОРАТОРИЯ",
       nav_inquiries: "ДИАЛОГ",
       scroll_cue: "DR. GII · МАСТЕРСТВО",
       craft_eyebrow: "МАСТЕРСТВО",
@@ -669,11 +667,9 @@
       closing_author: "— DR. GII",
     },
     en: {
-      nav_study: "THE STUDY",
-      nav_craft: "THE CRAFT",
-      nav_wisdom: "WISDOM",
-      nav_gallery: "ILLUSTRATIONS",
-      nav_inquiries: "CONVERSATION",
+      nav_intro: "INTRODUCTION",
+      nav_lab: "PROJECT LAB",
+      nav_inquiries: "DIALOGUE",
       scroll_cue: "DR. GII · THE CRAFT",
       craft_eyebrow: "THE CRAFT",
       craft_h1_1: "Between",
@@ -2800,7 +2796,11 @@
       this.lampPulse = 0;
       this.syncBoost = 0;
       this.dustSwirl = 0;
-      this.lang = "ru";
+      this.lang = "en";
+      try {
+        const saved = localStorage.getItem("drgii_lang");
+        if (saved === "ru" || saved === "en") this.lang = saved;
+      } catch (e) {}
       this.sandStrip = new SandMenuStrip(document.getElementById("sandStripCanvas"));
 
       // Mouse & Parallax
@@ -2908,6 +2908,7 @@
           this.setLanguage(btn.dataset.lang);
         });
       });
+      this.setLanguage(this.lang);
 
       this.bindCanvasEvents();
       this.bindKeyboard();
@@ -2942,6 +2943,9 @@
       if (lang !== "ru" && lang !== "en") return;
       this.lang = lang;
       document.documentElement.lang = lang;
+      try {
+        localStorage.setItem("drgii_lang", lang);
+      } catch (e) {}
 
       this.langButtons.forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.lang === lang);

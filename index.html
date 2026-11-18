@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=14" />
+  <link rel="stylesheet" href="styles.css?v=15" />
 </head>
 <body>
   <!-- =========================================================
-       TOP SAND STRIP MENU & LANGUAGE SWITCHER (RU / EN)
+       TOP SAND STRIP MENU & LANGUAGE SWITCHER (EN / RU)
        ========================================================= -->
   <header class="sand-navbar" id="sandNavbar">
     <canvas id="sandStripCanvas" class="sand-strip-canvas" aria-hidden="true"></canvas>
@@ -21,18 +21,16 @@
         <span>DR. GII</span>
       </a>
 
-      <nav class="sand-nav-links" aria-label="Навигация по сайту">
-        <a href="#study" class="sand-nav-link" data-i18n="nav_study">КАБИНЕТ</a>
-        <a href="#craft" class="sand-nav-link" data-i18n="nav_craft">МАСТЕРСТВО</a>
-        <a href="#wisdom" class="sand-nav-link" data-i18n="nav_wisdom">МУДРОСТЬ</a>
-        <a href="#gallery" class="sand-nav-link" data-i18n="nav_gallery">ИЛЛЮСТРАЦИИ</a>
-        <a href="#inquiries" class="sand-nav-link" data-i18n="nav_inquiries">ДИАЛОГ</a>
+      <nav class="sand-nav-links" aria-label="Site Navigation">
+        <a href="#study" class="sand-nav-link" data-i18n="nav_intro">INTRODUCTION</a>
+        <a href="#craft" class="sand-nav-link" data-i18n="nav_lab">PROJECT LAB</a>
+        <a href="#inquiries" class="sand-nav-link" data-i18n="nav_inquiries">DIALOGUE</a>
       </nav>
 
-      <div class="sand-lang-switch" role="group" aria-label="Выбор языка / Language">
-        <button type="button" class="sand-lang-btn active" data-lang="ru" id="btnLangRu">RU</button>
+      <div class="sand-lang-switch" role="group" aria-label="Language / Выбор языка">
+        <button type="button" class="sand-lang-btn" data-lang="ru" id="btnLangRu">RU</button>
         <span class="sand-lang-sep" aria-hidden="true">·</span>
-        <button type="button" class="sand-lang-btn" data-lang="en" id="btnLangEn">EN</button>
+        <button type="button" class="sand-lang-btn active" data-lang="en" id="btnLangEn">EN</button>
       </div>
     </div>
   </header>
@@ -73,8 +71,8 @@
       </div>
     </section>
 
-    <a href="#craft" class="scroll-cue" aria-label="Перейти к разделам Dr. Gii">
-      <span class="scroll-cue-text" data-i18n="scroll_cue">DR. GII · МАСТЕРСТВО</span>
+    <a href="#craft" class="scroll-cue" aria-label="Explore Dr. Gii">
+      <span class="scroll-cue-text" data-i18n="scroll_cue">DR. GII · THE CRAFT</span>
       <span class="scroll-cue-line"></span>
     </a>
   </main>
@@ -89,19 +87,19 @@
         <div class="dg-craft-left">
           <div class="dg-eyebrow">
             <span class="dg-eyebrow-line"></span>
-            <span class="dg-eyebrow-text" data-i18n="craft_eyebrow">МАСТЕРСТВО</span>
+            <span class="dg-eyebrow-text" data-i18n="craft_eyebrow">THE CRAFT</span>
           </div>
 
           <h1 class="dg-heading">
-            <span class="dg-heading-sans" data-i18n="craft_h1_1">Между</span>
-            <em class="dg-heading-serif" data-i18n="craft_h1_2">Тишиной</em>
-            <span class="dg-heading-sans" data-i18n="craft_h1_3">и Звуком.</span>
+            <span class="dg-heading-sans" data-i18n="craft_h1_1">Between</span>
+            <em class="dg-heading-serif" data-i18n="craft_h1_2">Silence</em>
+            <span class="dg-heading-sans" data-i18n="craft_h1_3">& Sound.</span>
           </h1>
 
           <blockquote class="dg-quote-card dg-quote-card--compact">
             <span class="dg-quote-mark" aria-hidden="true">“</span>
             <p class="dg-quote-body" data-i18n="craft_quote">
-              «Каждое стихотворение — это вопрос, облачённый в одежды ответа.»
+              "Every poem is a question dressed in the clothes of an answer."
             </p>
             <footer class="dg-quote-author" data-i18n="craft_quote_author">DR. GII</footer>
           </blockquote>
@@ -110,14 +108,13 @@
         <div class="dg-craft-right">
           <div class="dg-bio">
             <p data-i18n-html="craft_bio_1">
-              Dr. Gii пишет на пересечении философии и мелодии — там, где одна строка способна
-              переставить местами всё внутри вашего разума. Прошедшее школу прожитого опыта, это
-              творчество не столько утешает, сколько <strong>озаряет</strong>.
+              Dr. Gii writes at the intersection of philosophy and melody — where a single line can
+              rearrange the furniture of your mind. Trained in the school of lived experience, their
+              work doesn't comfort as much as it <strong>illuminates</strong>.
             </p>
             <p data-i18n="craft_bio_2">
-              Каждое стихотворение — это раскопки вглубь себя. Каждая песня — карта, начертанная
-              в темноте. Читатель приходит незнакомцем, а уходит, унося с собой то, о потере чего
-              даже не подозревал.
+              Each poem is an excavation. Each song lyric a map drawn in the dark. The reader arrives
+              as a stranger and leaves carrying something they didn't know they'd lost.
             </p>
           </div>
 
@@ -126,15 +123,15 @@
           <div class="dg-stats">
             <div class="dg-stat-item">
               <div class="dg-stat-num">200+</div>
-              <div class="dg-stat-label" data-i18n="stat_poems">НАПИСАНО СТИХОВ</div>
+              <div class="dg-stat-label" data-i18n="stat_poems">POEMS WRITTEN</div>
             </div>
             <div class="dg-stat-item">
               <div class="dg-stat-num">40+</div>
-              <div class="dg-stat-label" data-i18n="stat_lyrics">ТЕКСТОВ ПЕСЕН</div>
+              <div class="dg-stat-label" data-i18n="stat_lyrics">SONG LYRICS</div>
             </div>
             <div class="dg-stat-item">
               <div class="dg-stat-num dg-stat-num--inf">&infin;</div>
-              <div class="dg-stat-label" data-i18n="stat_questions">ЗАДАННЫХ ВОПРОСОВ</div>
+              <div class="dg-stat-label" data-i18n="stat_questions">QUESTIONS ASKED</div>
             </div>
           </div>
 
@@ -148,9 +145,9 @@
                 </svg>
               </div>
               <div class="dg-pillar-content">
-                <h3 class="dg-pillar-title" data-i18n="pillar_1_title">ФИЛОСОФСКАЯ ГЛУБИНА</h3>
+                <h3 class="dg-pillar-title" data-i18n="pillar_1_title">PHILOSOPHICAL DEPTH</h3>
                 <p class="dg-pillar-desc" data-i18n="pillar_1_desc">
-                  Каждая строка несёт в себе тяжесть вопроса, с которым стоит прожить.
+                  Every line carries the weight of a question worth living with.
                 </p>
               </div>
             </div>
@@ -163,9 +160,9 @@
                 </svg>
               </div>
               <div class="dg-pillar-content">
-                <h3 class="dg-pillar-title" data-i18n="pillar_2_title">ГОЛОС ВНЕ ВРЕМЕНИ</h3>
+                <h3 class="dg-pillar-title" data-i18n="pillar_2_title">TIMELESS VOICE</h3>
                 <p class="dg-pillar-desc" data-i18n="pillar_2_desc">
-                  Написано сейчас, звучит вечно — укоренено в извечном поиске человека.
+                  Written now, felt forever — rooted in the eternal human search.
                 </p>
               </div>
             </div>
@@ -179,11 +176,8 @@
       <div class="dg-container dg-wisdom-inner">
         <blockquote class="dg-quote-card dg-quote-card--wide">
           <span class="dg-quote-mark" aria-hidden="true">“</span>
-          <p class="dg-quote-body dg-quote-body--ru" data-i18n="wisdom_quote">
-            Время, которое убегает от нас — как песок. У кого-то
-            он пройдет сквозь пальцы, а мудрец из песка создаст
-            свою пирамиду на тысячелетия. Прикоснитесь к
-            мудрости, ведь это самое ценное из чудес.
+          <p class="dg-quote-body dg-quote-body--en" data-i18n="wisdom_quote">
+            Time slipping away from us is like sand. For some, it runs through their fingers — yet a sage will build from that sand a pyramid to stand for millennia. Touch wisdom, for it is the most precious of all wonders.
           </p>
         </blockquote>
       </div>
@@ -196,28 +190,27 @@
           <div class="dg-gallery-title-col">
             <div class="dg-eyebrow">
               <span class="dg-eyebrow-line"></span>
-              <span class="dg-eyebrow-text" data-i18n="gal_eyebrow">АРХИВ КАБИНЕТА · ИЛЛЮСТРАЦИИ</span>
+              <span class="dg-eyebrow-text" data-i18n="gal_eyebrow">STUDY ARCHIVE · ILLUSTRATIONS</span>
             </div>
 
             <h2 class="dg-heading">
-              <span class="dg-heading-sans" data-i18n="gal_h2_1">Гравюры</span>
-              <em class="dg-heading-serif" data-i18n="gal_h2_2">Вечности</em>
-              <span class="dg-heading-sans" data-i18n="gal_h2_3">и Этюды Сфер.</span>
+              <span class="dg-heading-sans" data-i18n="gal_h2_1">Engravings of</span>
+              <em class="dg-heading-serif" data-i18n="gal_h2_2">Eternity</em>
+              <span class="dg-heading-sans" data-i18n="gal_h2_3">& Sphere Studies.</span>
             </h2>
           </div>
 
           <div class="dg-gallery-meta-col">
             <p class="dg-gallery-sub" data-i18n="gal_sub">
-              Листы из закрытого архива Dr. Gii: небесная механика сфер, анатомические штудии,
-              хронометрия песка и геометрия стиха. Нажмите на любую гравюру, чтобы исследовать
-              детали в архивном просмотрщике.
+              Folio plates from the private archive of Dr. Gii: celestial mechanics, anatomical studies,
+              sand chronometry, and the geometry of verse. Click any plate to inspect it in the archival viewer.
             </p>
 
-            <div class="dg-gallery-filters" id="galleryFilters" role="tablist" aria-label="Фильтр иллюстраций">
-              <button type="button" class="dg-filter-btn active" data-filter="all" data-i18n="gal_filter_all">ВСЕ ЛИСТЫ (6)</button>
-              <button type="button" class="dg-filter-btn" data-filter="spheres" data-i18n="gal_filter_spheres">ЭТЮДЫ СФЕР</button>
-              <button type="button" class="dg-filter-btn" data-filter="anatomy" data-i18n="gal_filter_anatomy">АНАТОМИЯ И ВРЕМЯ</button>
-              <button type="button" class="dg-filter-btn" data-filter="folios" data-i18n="gal_filter_folios">АРХИВ КАБИНЕТА</button>
+            <div class="dg-gallery-filters" id="galleryFilters" role="tablist" aria-label="Illustration filters">
+              <button type="button" class="dg-filter-btn active" data-filter="all" data-i18n="gal_filter_all">ALL PLATES (6)</button>
+              <button type="button" class="dg-filter-btn" data-filter="spheres" data-i18n="gal_filter_spheres">SPHERE STUDIES</button>
+              <button type="button" class="dg-filter-btn" data-filter="anatomy" data-i18n="gal_filter_anatomy">ANATOMY & TIME</button>
+              <button type="button" class="dg-filter-btn" data-filter="folios" data-i18n="gal_filter_folios">STUDY ARCHIVE</button>
             </div>
           </div>
         </div>
@@ -357,19 +350,18 @@
       <div class="dg-container dg-inquiries-inner">
         <div class="dg-eyebrow dg-eyebrow--center">
           <span class="dg-eyebrow-line"></span>
-          <span class="dg-eyebrow-text" data-i18n="inq_eyebrow">ВОПРОСЫ И ДИАЛОГ</span>
+          <span class="dg-eyebrow-text" data-i18n="inq_eyebrow">INQUIRIES & CONVERSATION</span>
           <span class="dg-eyebrow-line"></span>
         </div>
 
         <h2 class="dg-heading dg-heading--center">
-          <span class="dg-heading-sans" data-i18n="inq_h2_1">Если слово</span>
-          <em class="dg-heading-serif" data-i18n="inq_h2_2">нашло вас —</em>
-          <span class="dg-heading-sans" data-i18n="inq_h2_3">напишите в ответ.</span>
+          <span class="dg-heading-sans" data-i18n="inq_h2_1">If a word</span>
+          <em class="dg-heading-serif" data-i18n="inq_h2_2">found you —</em>
+          <span class="dg-heading-sans" data-i18n="inq_h2_3">write back.</span>
         </h2>
 
         <p class="dg-inquiries-sub" data-i18n-html="inq_sub">
-          Если вы оказались на этой странице, что-то привело вас сюда.<br />
-          Узнайте, что именно — в Telegram.
+          If you visited this page, something brought you here. Come<br />find out what it was — on Telegram.
         </p>
 
         <div class="dg-cta-wrap">
@@ -384,14 +376,14 @@
                 <path d="M19.2 4.8L3.9 10.7c-1 .4-1 1-.2 1.3l3.9 1.2 9.1-5.7c.4-.3.8-.1.5.2l-7.4 6.7-.3 4.1c.4 0 .6-.2.8-.4l2-1.9 4.1 3c.8.4 1.3.2 1.5-.7l2.6-12.4c.3-1.1-.4-1.6-1.3-1.3z" />
               </svg>
             </span>
-            <span data-i18n="inq_btn">@DRGII В TELEGRAM</span>
+            <span data-i18n="inq_btn">@DRGII ON TELEGRAM</span>
           </a>
         </div>
 
         <div class="dg-footer-rule"></div>
 
         <div class="dg-closing">
-          <p class="dg-closing-quote" data-i18n="closing_quote">«Страница заканчивается. Диалог — никогда.»</p>
+          <p class="dg-closing-quote" data-i18n="closing_quote">"The page ends. The conversation doesn't."</p>
           <div class="dg-closing-author" data-i18n="closing_author">— DR. GII</div>
         </div>
       </div>

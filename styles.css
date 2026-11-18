@@ -1364,18 +1364,66 @@ body {
   }
   .sand-nav-links {
     padding: 3px 6px;
-    gap: 2px;
+    gap: 6px;
   }
   .sand-nav-link {
     font-size: 9.5px;
-    letter-spacing: 0.1em;
-    padding: 4px 7px;
+    letter-spacing: 0.08em;
+    padding: 4px 6px;
+  }
+  .app-shell {
+    min-height: auto;
+    padding: 0 12px 6px;
+  }
+  .stage-wrap {
+    width: min(calc(100vw - 20px), calc((100vh - 60px) * 1024 / 764));
+    border-radius: 10px;
+  }
+  .scroll-cue {
+    margin-top: 6px;
+    margin-bottom: 2px;
+  }
+  .dg-craft {
+    padding: 16px 0 48px;
+    border-top: none;
   }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640px), (max-width: 760px) and (orientation: portrait) {
+  .app-shell {
+    min-height: auto;
+    padding: 0 8px 4px;
+  }
+  .stage-wrap {
+    width: min(calc(100vw - 16px), calc((100vh - 54px) * 1024 / 764));
+    border-radius: 8px;
+  }
+  .scroll-cue {
+    margin-top: 4px;
+    margin-bottom: 0;
+  }
+  .dg-craft {
+    padding: 10px 0 36px;
+    border-top: none;
+  }
+  .dg-craft-grid {
+    gap: 18px;
+  }
+  .dg-craft-right {
+    padding-top: 0;
+  }
+  .dg-eyebrow {
+    margin-bottom: 6px;
+  }
+  .dg-heading {
+    margin-bottom: 10px;
+  }
+  .dg-quote-card--compact {
+    margin-top: 12px;
+    padding: 16px 18px;
+  }
   .dg-container {
-    padding: 0 22px;
+    padding: 0 20px;
   }
   .dg-stats {
     grid-template-columns: 1fr;
@@ -1390,8 +1438,7 @@ body {
     flex-direction: column;
     align-items: flex-start;
   }
-  .dg-quote-card--wide,
-  .dg-quote-card--compact {
+  .dg-quote-card--wide {
     padding: 24px 24px 28px;
   }
   .dg-fixed-sig {
