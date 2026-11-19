@@ -3078,7 +3078,7 @@
           return;
         }
         if (this.reducedMotion) {
-          requestAnimationFrame(tick);
+          this.render(now * 0.001);
           return;
         }
         this.update(dt, now * 0.001);
