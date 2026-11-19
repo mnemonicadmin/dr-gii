@@ -1,6 +1,7 @@
-import base64
+import argparse
 import json
 import os
+from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 from scipy.ndimage import (
@@ -10,20 +11,11 @@ from scipy.ndimage import (
     map_coordinates,
 )
 
-SRC_IMAGE = (
-    "C:/Users/bowhe/.gemini/antigravity/brain/"
-    "84f671d8-eb56-4556-bd91-00cf2227845e/.user_uploaded/media_1794722347432_e84c6cc1.jpg"
-)
-OUT_DIR = "C:/Users/bowhe/.gemini/antigravity/scratch/cosmic-study-motion/assets"
-HG_DIR = "C:/Users/bowhe/.gemini/antigravity/scratch/cosmic-study-motion/hourglass_project"
-SCRATCH_DIR = (
-    "C:/Users/bowhe/.gemini/antigravity/brain/"
-    "84f671d8-eb56-4556-bd91-00cf2227845e/scratch"
-)
-
-os.makedirs(OUT_DIR, exist_ok=True)
-os.makedirs(os.path.join(OUT_DIR, "books"), exist_ok=True)
-os.makedirs(SCRATCH_DIR, exist_ok=True)
+REPO_ROOT = Path(__file__).resolve().parents[1]
+SRC_IMAGE = None
+OUT_DIR = str(REPO_ROOT / "assets")
+HG_DIR = str(REPO_ROOT / "hourglass_project")
+SCRATCH_DIR = str(REPO_ROOT / ".asset-check")
 
 # 38 pixel-aligned vertical shelf books across all 4 bookcase bays (all real books by real authors!)
 BOOKS = [
@@ -729,6 +721,27 @@ def build_custom_hourglass_assets():
 
 
 def main():
+    global SRC_IMAGE, OUT_DIR, HG_DIR, SCRATCH_DIR
+
+    parser = argparse.ArgumentParser(description="Build the Dr. Gii motion scene assets")
+    parser.add_argument("--source", required=True, help="Source study image")
+    parser.add_argument("--output", default=str(REPO_ROOT / "assets"), help="Generated assets directory")
+    parser.add_argument("--hourglass", default=str(REPO_ROOT / "hourglass_project"), help="Hourglass source directory")
+    parser.add_argument("--scratch", default=str(REPO_ROOT / ".asset-check"), help="Temporary visual-check directory")
+    args = parser.parse_args()
+
+    SRC_IMAGE = str(Path(args.source).expanduser().resolve())
+    OUT_DIR = str(Path(args.output).expanduser().resolve())
+    HG_DIR = str(Path(args.hourglass).expanduser().resolve())
+    SCRATCH_DIR = str(Path(args.scratch).expanduser().resolve())
+
+    os.makedirs(OUT_DIR, exist_ok=True)
+    os.makedirs(os.path.join(OUT_DIR, "books"), exist_ok=True)
+    os.makedirs(SCRATCH_DIR, exist_ok=True)
+
+    if not os.path.isfile(SRC_IMAGE):
+        parser.error(f"Source image not found: {SRC_IMAGE}")
+
     im = Image.open(SRC_IMAGE).convert("RGB")
     arr = np.array(im, dtype=np.float32)
     bg_arr = arr.copy()
@@ -769,32 +782,28 @@ def main():
         "images": {},
     }
 
-    def b64(path):
-        ext = os.path.splitext(path)[1].lower()
-        mime = "image/jpeg" if ext in (".jpg", ".jpeg") else "image/png"
-        with open(path, "rb") as f:
-            return f"data:{mime};base64," + base64.b64encode(f.read()).decode("ascii")
+    def asset_ref(path):
+        return Path(path).resolve().relative_to(REPO_ROOT).as_posix()
 
-    bundle["images"]["bg_study"] = b64(os.path.join(OUT_DIR, "bg_study.png"))
-    bundle["images"]["gentleman_fg"] = b64(os.path.join(OUT_DIR, "gentleman_fg.png"))
-    bundle["images"]["desk_book"] = b64(os.path.join(OUT_DIR, "desk_book.png"))
-    bundle["images"]["hg_back"] = b64(os.path.join(OUT_DIR, "hg_back.png"))
-    bundle["images"]["hg_front"] = b64(os.path.join(OUT_DIR, "hg_front.png"))
-    bundle["images"]["hg_mask"] = b64(os.path.join(OUT_DIR, "hg_mask.png"))
-    bundle["images"]["hg_glass"] = b64(os.path.join(OUT_DIR, "hg_glass.png"))
-    for k in (1, 2, 3):
-        ap_path = os.path.join(OUT_DIR, f"atlas_plate_{k}.jpg")
-        if os.path.exists(ap_path):
-            bundle["images"][f"atlas_plate_{k}"] = b64(ap_path)
+    bundle["images"]["bg_study"] = asset_ref(os.path.join(OUT_DIR, "bg_study.png"))
+    bundle["images"]["gentleman_fg"] = asset_ref(os.path.join(OUT_DIR, "gentleman_fg.png"))
+    bundle["images"]["desk_book"] = asset_ref(os.path.join(OUT_DIR, "desk_book.png"))
+    bundle["images"]["hg_back"] = asset_ref(os.path.join(OUT_DIR, "hg_back.png"))
+    bundle["images"]["hg_front"] = asset_ref(os.path.join(OUT_DIR, "hg_front.png"))
+    bundle["images"]["hg_mask"] = asset_ref(os.path.join(OUT_DIR, "hg_mask.png"))
+    bundle["images"]["hg_glass"] = asset_ref(os.path.join(OUT_DIR, "hg_glass.png"))
+    bundle["images"]["atlas_plate_1"] = asset_ref(os.path.join(OUT_DIR, "atlas_plate_1.jpg"))
+    bundle["images"]["atlas_plate_2"] = asset_ref(os.path.join(OUT_DIR, "atlas_plate_2.jpg"))
+    bundle["images"]["atlas_plate_3"] = asset_ref(os.path.join(OUT_DIR, "atlas_plate_3.jpg"))
     for p in PLANETS:
-        bundle["images"][f"planet_{p['id']}_tex"] = b64(
+        bundle["images"][f"planet_{p['id']}_tex"] = asset_ref(
             os.path.join(OUT_DIR, f"planet_{p['id']}_tex.png")
         )
-        bundle["images"][f"planet_{p['id']}_light"] = b64(
+        bundle["images"][f"planet_{p['id']}_light"] = asset_ref(
             os.path.join(OUT_DIR, f"planet_{p['id']}_light.png")
         )
     for b in BOOKS:
-        bundle["images"][f"book_{b['id']}"] = b64(
+        bundle["images"][f"book_{b['id']}"] = asset_ref(
             os.path.join(OUT_DIR, "books", f"book_{b['id']}.png")
         )
 

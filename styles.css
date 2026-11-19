@@ -1088,6 +1088,10 @@ body {
   pointer-events: auto;
 }
 
+body.dg-modal-open {
+  overflow: hidden;
+}
+
 .dg-lightbox-backdrop {
   position: absolute;
   inset: 0;
@@ -1363,13 +1367,21 @@ body {
     letter-spacing: 0.14em;
   }
   .sand-nav-links {
-    padding: 3px 6px;
-    gap: 6px;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(48vw, 280px);
+    justify-content: center;
+    padding: 3px 2px;
+    gap: 2px;
   }
   .sand-nav-link {
-    font-size: 9.5px;
-    letter-spacing: 0.08em;
-    padding: 4px 6px;
+    font-size: 8.5px;
+    letter-spacing: 0.04em;
+    padding: 4px 3px;
+  }
+  .sand-lang-switch {
+    flex-shrink: 0;
   }
   .app-shell {
     min-height: auto;
@@ -1445,5 +1457,18 @@ body {
     width: clamp(170px, 44vw, 240px);
     right: -4px;
     bottom: -10px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
   }
 }

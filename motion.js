@@ -1189,6 +1189,7 @@
       this.lang = document.documentElement.lang || "ru";
       this.activePlate = 0;
       this.isOpen = false;
+      this.previousFocus = null;
 
       this.plateMeta = [
         { roman: "TABULA I", code: "ARCHIVE · MS-GII-01", latin: "VENUS ET MERIDIANUS COELESTIS" },
@@ -1264,11 +1265,30 @@
         if (e.key === "Escape") this.closeLightbox();
         else if (e.key === "ArrowLeft") this.openLightbox((this.activePlate + 5) % 6);
         else if (e.key === "ArrowRight") this.openLightbox((this.activePlate + 1) % 6);
+        else if (e.key === "Tab") {
+          const focusable = Array.from(
+            this.lightbox.querySelectorAll("button, [href], [tabindex]:not([tabindex='-1'])")
+          ).filter((el) => !el.hasAttribute("disabled"));
+          if (!focusable.length) return;
+          const first = focusable[0];
+          const last = focusable[focusable.length - 1];
+          if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
       });
     }
 
     openLightbox(idx) {
       if (!this.lightbox || !this.lbCanvas) return;
+      if (!this.isOpen) {
+        this.previousFocus = document.activeElement;
+        document.body.classList.add("dg-modal-open");
+      }
       this.activePlate = idx;
       this.isOpen = true;
       const ctx = this.lbCanvas.getContext("2d");
@@ -1276,6 +1296,8 @@
       this.updateLightboxText(idx);
       this.lightbox.classList.add("open");
       this.lightbox.setAttribute("aria-hidden", "false");
+      const closeButton = document.getElementById("lbClose");
+      if (closeButton) closeButton.focus();
     }
 
     updateLightboxText(idx) {
@@ -1293,6 +1315,11 @@
       this.isOpen = false;
       this.lightbox.classList.remove("open");
       this.lightbox.setAttribute("aria-hidden", "true");
+      document.body.classList.remove("dg-modal-open");
+      if (this.previousFocus && typeof this.previousFocus.focus === "function") {
+        this.previousFocus.focus();
+      }
+      this.previousFocus = null;
     }
 
     drawBaseFolio(g, W, H, meta) {
@@ -3035,10 +3062,25 @@
       window.addEventListener("resize", () => this.resizeCanvas());
       this.updateBooksButtonLabel();
 
+      this.isStudyVisible = true;
+      this.reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const studyObserver = new IntersectionObserver((entries) => {
+        this.isStudyVisible = entries[0] ? entries[0].isIntersecting : true;
+      }, { threshold: 0.05 });
+      studyObserver.observe(this.canvas);
+
       let lastTs = performance.now();
       const tick = (now) => {
         const dt = Math.min(0.05, (now - lastTs) / 1000);
         lastTs = now;
+        if (document.hidden || !this.isStudyVisible) {
+          requestAnimationFrame(tick);
+          return;
+        }
+        if (this.reducedMotion) {
+          requestAnimationFrame(tick);
+          return;
+        }
         this.update(dt, now * 0.001);
         this.render(now * 0.001);
         requestAnimationFrame(tick);
