@@ -198,8 +198,8 @@ body {
 
 .stage-wrap {
   position: relative;
-  width: min(calc(100vw - 32px), calc((100vh - 34px) * 1024 / 764));
-  aspect-ratio: 1024 / 764;
+  width: calc(100vw - 32px);
+  height: min(calc(100vh - 38px), calc((100vw - 32px) * 764 / 1024));
   border-radius: 14px;
   overflow: hidden;
   box-shadow:
@@ -1389,6 +1389,8 @@ body.dg-modal-open {
   }
   .stage-wrap {
     width: min(calc(100vw - 20px), calc((100vh - 60px) * 1024 / 764));
+    height: auto;
+    aspect-ratio: 1024 / 764;
     border-radius: 10px;
   }
   .scroll-cue {
@@ -1408,6 +1410,8 @@ body.dg-modal-open {
   }
   .stage-wrap {
     width: min(calc(100vw - 16px), calc((100vh - 54px) * 1024 / 764));
+    height: auto;
+    aspect-ratio: 1024 / 764;
     border-radius: 8px;
   }
   .scroll-cue {

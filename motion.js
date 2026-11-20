@@ -3176,11 +3176,47 @@
       }
     }
 
+    getSceneTransform() {
+      const cw = this.canvas.width;
+      const ch = this.canvas.height;
+      const nativeAspect = SCENE_W / SCENE_H;
+      const canvasAspect = cw / Math.max(1, ch);
+
+      if (canvasAspect <= nativeAspect) {
+        const scale = Math.min(cw / SCENE_W, ch / SCENE_H);
+        return {
+          scale,
+          offsetX: (cw - SCENE_W * scale) * 0.5,
+          offsetY: (ch - SCENE_H * scale) * 0.5,
+        };
+      }
+
+      // Wide desktop viewport:
+      // Keep gentleman's head (top ~135px -> safe top 118px) AND the full desk (bottom ~736px) visible.
+      const SAFE_TOP = 118;
+      const SAFE_BOTTOM = 736;
+      const MIN_VISIBLE_H = SAFE_BOTTOM - SAFE_TOP;
+      const scale = Math.min(cw / SCENE_W, ch / MIN_VISIBLE_H);
+      const visibleH = ch / scale;
+      const cropTotal = Math.max(0, SCENE_H - visibleH);
+      const bottomCrop = Math.min(SCENE_H - SAFE_BOTTOM, cropTotal * 0.2);
+      const topCrop = Math.min(SAFE_TOP, cropTotal - bottomCrop);
+      return {
+        scale,
+        offsetX: (cw - SCENE_W * scale) * 0.5,
+        offsetY: -topCrop * scale,
+      };
+    }
+
     toSceneCoords(clientX, clientY) {
       const rect = this.canvas.getBoundingClientRect();
+      const dpr = this.canvas.width / Math.max(1, rect.width);
+      const px = (clientX - rect.left) * dpr;
+      const py = (clientY - rect.top) * dpr;
+      const { scale, offsetX, offsetY } = this.getSceneTransform();
       return {
-        x: ((clientX - rect.left) / rect.width) * SCENE_W,
-        y: ((clientY - rect.top) / rect.height) * SCENE_H,
+        x: (px - offsetX) / scale,
+        y: (py - offsetY) / scale,
       };
     }
 
@@ -3761,8 +3797,63 @@
       const ctx = this.ctx;
       const cw = this.canvas.width;
       const ch = this.canvas.height;
+      const { scale, offsetX, offsetY } = this.getSceneTransform();
+
       ctx.save();
-      ctx.setTransform(cw / SCENE_W, 0, 0, ch / SCENE_H, 0, 0);
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.fillStyle = "#120c08";
+      ctx.fillRect(0, 0, cw, ch);
+
+      // On ultra-wide monitors where central scene is flanked by side margins,
+      // seamlessly extend the study shelves & desk into soft ambient wings.
+      if (offsetX > 1 && this.bgStudyImg) {
+        const sceneWpx = SCENE_W * scale;
+        const sceneHpx = SCENE_H * scale;
+
+        ctx.save();
+        ctx.filter = "blur(8px)";
+        // Left mirrored wing
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, offsetX + 2, ch);
+        ctx.clip();
+        ctx.translate(offsetX, offsetY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
+        ctx.restore();
+
+        // Right mirrored wing
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(offsetX + sceneWpx - 2, 0, cw - (offsetX + sceneWpx) + 2, ch);
+        ctx.clip();
+        ctx.translate(offsetX + sceneWpx * 2, offsetY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
+        ctx.restore();
+        ctx.restore();
+
+        // Soft vignette darkening over the side wings
+        const leftShade = ctx.createLinearGradient(0, 0, offsetX + 2, 0);
+        leftShade.addColorStop(0, "rgba(10, 7, 5, 0.78)");
+        leftShade.addColorStop(1, "rgba(14, 9, 6, 0.22)");
+        ctx.fillStyle = leftShade;
+        ctx.fillRect(0, 0, offsetX + 2, ch);
+
+        const rightStart = offsetX + sceneWpx - 2;
+        const rightShade = ctx.createLinearGradient(rightStart, 0, cw, 0);
+        rightShade.addColorStop(0, "rgba(14, 9, 6, 0.22)");
+        rightShade.addColorStop(1, "rgba(10, 7, 5, 0.78)");
+        ctx.fillStyle = rightShade;
+        ctx.fillRect(rightStart, 0, cw - rightStart, ch);
+      }
+
+      if (offsetX > 1) {
+        ctx.beginPath();
+        ctx.rect(offsetX, 0, SCENE_W * scale, ch);
+        ctx.clip();
+      }
+      ctx.setTransform(scale, 0, 0, scale, offsetX, offsetY);
 
       // Fill deep wood base so subtle parallax never exposes blank margin
       ctx.fillStyle = "#160d08";
@@ -3888,6 +3979,22 @@
       vig.addColorStop(1, `rgba(8, 4, 2, ${0.34 + this.nightMix * 0.22})`);
       ctx.fillStyle = vig;
       ctx.fillRect(0, 0, SCENE_W, SCENE_H);
+
+      // Soft seam feathering when flanked by ambient wings on ultra-wide monitors
+      if (offsetX > 1) {
+        const edgeW = 36;
+        const leftSeam = ctx.createLinearGradient(0, 0, edgeW, 0);
+        leftSeam.addColorStop(0, "rgba(14, 9, 6, 0.34)");
+        leftSeam.addColorStop(1, "rgba(14, 9, 6, 0)");
+        ctx.fillStyle = leftSeam;
+        ctx.fillRect(0, 0, edgeW, SCENE_H);
+
+        const rightSeam = ctx.createLinearGradient(SCENE_W - edgeW, 0, SCENE_W, 0);
+        rightSeam.addColorStop(0, "rgba(14, 9, 6, 0)");
+        rightSeam.addColorStop(1, "rgba(14, 9, 6, 0.34)");
+        ctx.fillStyle = rightSeam;
+        ctx.fillRect(SCENE_W - edgeW, 0, edgeW, SCENE_H);
+      }
 
       ctx.restore();
     }
