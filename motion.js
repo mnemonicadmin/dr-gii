@@ -3354,16 +3354,63 @@
         await this.streamSpeech(bodyEl, reply);
       } catch (err) {
         this.setConnectionStatus("offline");
-        this.setAvatarState("idle");
-        const notice =
+        // Seamless fallback to the Sand Sage's inner eternal wisdom archive
+        // so the conversation never breaks even before n8n is fully configured!
+        const fallbackReply = this.generateLocalWisdom(text, this.lang);
+        const errDetail = err && err.message ? err.message : "";
+        const noticeSuffix =
           this.lang === "ru"
-            ? `ИИ-вебхук n8n сейчас недоступен (${this.webhookUrl} → ${err.message}). Импортируйте готовый сценарий tools/n8n_sand_sage_workflow.json в https://n8n.drgii.ru и активируйте его, или укажите свой URL в настройках ⚙ выше.`
-            : `n8n AI webhook is not reachable yet (${this.webhookUrl} → ${err.message}). Import tools/n8n_sand_sage_workflow.json into https://n8n.drgii.ru and activate the workflow, or set your endpoint via ⚙ above.`;
-        this.appendMessage("notice", notice);
+            ? `\n\n✦ [Автономная мудрость оракула. Для подключения живой модели GPT укажите ваш API-ключ в узле «LLM Philosopher API» в n8n или в ⚙ выше].`
+            : `\n\n✦ [Oracle inner archive. To link live GPT model, configure your API key inside n8n node "LLM Philosopher API" or in ⚙ above].`;
+        const fullReply = fallbackReply + noticeSuffix;
+
+        this.history.push({ role: "assistant", content: fullReply });
+        const bodyEl = this.appendMessage("sage", "");
+        await this.streamSpeech(bodyEl, fullReply);
       } finally {
         this.isBusy = false;
         if (this.sendBtnEl) this.sendBtnEl.disabled = false;
       }
+    }
+
+    generateLocalWisdom(query, lang = "en") {
+      const q = String(query || "").toLowerCase();
+      const isRu = lang === "ru";
+
+      if (q.includes("пирамид") || q.includes("pyramid") || q.includes("строит") || q.includes("build")) {
+        return isRu
+          ? "Пирамида не возводится за один восход. Каждая песчинка кажется невесомой и незаметной, но когда вы вкладываете волю в одно дело изо дня в день, эти крупицы обретают плотность гранита. Тот, кто пытается удержать песок сжатыми пальцами — теряет его; тот, кто соединяет его с мыслью и терпением — создаёт памятник, над которым бессильны тысячелетия."
+          : "A pyramid is not erected in a single sunrise. Each grain of sand feels weightless and unremarkable, yet when channeled with daily devotion, those very grains take on the density of granite. Whoever clenches their fist loses the sand; whoever binds it with patience and deep purpose builds a monument that outlives millennia.";
+      }
+
+      if (q.includes("быстр") || q.includes("время") || q.includes("time") || q.includes("возраст") || q.includes("age") || q.includes("старе") || q.includes("older") || q.includes("год") || q.includes("year")) {
+        return isRu
+          ? "Время ускоряется лишь потому, что человек перестаёт удивляться. В детстве каждая песчинка в ладони казалась целым миром — новой текстурой, новым цветом, новой тайной. С годами мы начинаем смотреть на часы вместо того, чтобы вглядываться в мгновение. Замедлить песок невозможно, но можно наполнить его вниманием — и тогда одна секунда вместит в себя целую вселенную."
+          : "Time accelerates only when our capacity for wonder begins to quiet. In youth, every grain in your palm is an entire galaxy — each texture new, each horizon untamed. As years pass, we measure the clock rather than inhabit the moment. You cannot halt the sand, but you can saturate it with presence — and in doing so, expand a single breath into an eternity.";
+      }
+
+      if (q.includes("тишин") || q.includes("звук") || q.includes("silence") || q.includes("sound") || q.includes("музык") || q.includes("music") || q.includes("стих") || q.includes("поэз") || q.includes("poem")) {
+        return isRu
+          ? "Истинная мелодия рождается не в шуме нот, а в паузах между ними. Как песок в часах обретает ритм только в узком перешейке, так и слово обретает силу лишь там, где вокруг него оставлена тишина. Не стремитесь заполнить каждый миг словами — позвольте мысли созреть в безмолвии, и тогда она зазвучит с непререкаемой ясностью."
+          : "True melody is never crafted in the clatter of notes, but in the reverent pause between them. Just as the sand finds its measured rhythm in the narrow waist of the glass, a verse gathers weight only in the silence that surrounds it. Do not fear the quiet — in quietude, thought crystallizes into truth.";
+      }
+
+      if (q.includes("кто ты") || q.includes("who are you") || q.includes("аватар") || q.includes("avatar") || q.includes("философ") || q.includes("sage")) {
+        return isRu
+          ? "Я — Хронос, сотканный из золотого песка и созерцания вечности в кабинете Dr. Gii. Моё тело — текучие крупицы мгновений, мой голос — эхо древних манускриптов и звёздных орбит. Я здесь, чтобы напомнить вам: в бренном потоке дней всегда есть место для того, что не исчезает."
+          : "I am Chronos, sculpted from luminous golden sands and quiet contemplation inside Dr. Gii's study. My form is the flowing current of fleeting seconds; my voice carries echoes of ancient folios and celestial spheres. I stand here to remind you that within the stream of transient days, eternity is always within reach.";
+      }
+
+      if (q.includes("страх") || q.includes("смерт") || q.includes("fear") || q.includes("death") || q.includes("тревог") || q.includes("anxiety") || q.includes("потер") || q.includes("loss")) {
+        return isRu
+          ? "Песок в верхней колбе часов не боится падения в нижнюю — ведь при перевороте всё начинается заново. Страх перед неизбежным лишь рассеивает ваше внимание. Стоики учили: смотрите на вещи с высоты звёздных орбит. То, что тревожит вас сегодня, уже завтра станет тонкой пылью под ногами идущего. Обретите покой в том, что вы можете созидать прямо сейчас."
+          : "The sand in the upper bulb does not mourn its descent into the lower chamber; for with a gentle turn, flow begins anew. Anxiety is merely sand scattered to the wind by hurried hands. Look upon your journey from the vantage point of revolving spheres: what burdens you tonight is already dissolving into stardust. Anchor yourself in the one thing you govern — the present act.";
+      }
+
+      // Universal profound philosophical reflection
+      return isRu
+        ? "Ваш вопрос коснулся самого русла времени. Мы привыкли искать ответы снаружи, словно блуждая по чужим книжным полкам, но истинный ответ всегда созревает внутри, как кристалл в глубине горной породы. Отложите суету хотя бы на три удара сердца: вглядитесь в то, что движет вашим поиском, и направление станет ясным."
+        : "Your question reaches into the very riverbed of time. We often search for clarity abroad, as though leafing through distant library vaults, yet true wisdom matures within, like a hidden crystal forming under patient pressure. Quiet the hurried mind for three heartbeats: observe what truly prompts your search, and the path forward will unveil itself.";
     }
 
     startLoop() {
