@@ -578,18 +578,28 @@
   const ATLAS_PLATES = [
     {
       roman: "I",
-      name: "Рис. 698 · Органы грудной полости (Ангиология)",
-      name_en: "Fig. 698 · Thoracic Cavity Organs (Angiology)",
+      name: "Органы грудной полости и сердце (Ангиология)",
+      name_en: "Thoracic Cavity Organs & Heart (Angiology)",
     },
     {
       roman: "II",
-      name: "Рис. 926 · Продолговатый мозг и мост (ЦНС)",
-      name_en: "Fig. 926 · Medulla Oblongata & Pons (CNS)",
+      name: "Продолговатый мозг, мост и полушарие (ЦНС)",
+      name_en: "Medulla, Pons & Cerebral Hemisphere (CNS)",
     },
     {
       roman: "III",
-      name: "Рис. 49 · Череп, cranium; вид справа (Остеология)",
-      name_en: "Fig. 49 · Skull, Cranium; Right View (Osteology)",
+      name: "Череп и скелет кисти (Остеология)",
+      name_en: "Cranium & Bones of the Hand (Osteology)",
+    },
+    {
+      roman: "IV",
+      name: "Мышечная система и дуга аорты (Миология)",
+      name_en: "Muscular System & Arch of the Aorta (Myology)",
+    },
+    {
+      roman: "V",
+      name: "Черепные нервы и строение глаза (Неврология)",
+      name_en: "Cranial Nerves & Section of the Eye (Neurology)",
     },
   ];
 
@@ -1936,72 +1946,25 @@
   function buildAtlasPlates(plateImgs = []) {
     const W = 880;
     const H = 528;
-    const [ap1, ap2, ap3] = plateImgs;
+    const pairs = [
+      ["I", plateImgs[0], plateImgs[3]],
+      ["II", plateImgs[1], plateImgs[4]],
+      ["III", plateImgs[2], plateImgs[5]],
+      ["IV", plateImgs[6], plateImgs[7]],
+      ["V", plateImgs[8], plateImgs[9]],
+    ];
 
-    // Plate I: Uploaded Image 1 (Рис. 698 — Положение органов в грудной полости; вид спереди)
-    const p1 = createParchmentPage(W, H, "I");
-    if (ap1) {
-      // Left page: full Sinelnikov page (header + lungs + 3-column caption text)
-      drawImageFitMultiply(p1.g, ap1, 0, 0, ap1.width, ap1.height, 26, 48, 388, 456);
-      // Right page: large magnified view of the thoracic organs illustration (Рис. 698)
-      drawImageFitMultiply(
-        p1.g,
-        ap1,
-        Math.round(ap1.width * 0.08),
-        Math.round(ap1.height * 0.13),
-        Math.round(ap1.width * 0.84),
-        Math.round(ap1.height * 0.64),
-        466,
-        28,
-        388,
-        472
-      );
-    }
-    finishParchmentSpread(p1.g, W, H, "I");
-
-    // Plate II: Uploaded Image 2 (Рис. 926 — Продолговатый мозг, мост и ножки мозга)
-    const p2 = createParchmentPage(W, H, "II");
-    if (ap2) {
-      // Left page: full Sinelnikov page (CNS text columns + brainstem figure + caption)
-      drawImageFitMultiply(p2.g, ap2, 0, 0, ap2.width, ap2.height, 26, 48, 388, 456);
-      // Right page: large magnified view of the brainstem & cranial nerves (Рис. 926)
-      drawImageFitMultiply(
-        p2.g,
-        ap2,
-        Math.round(ap2.width * 0.08),
-        Math.round(ap2.height * 0.34),
-        Math.round(ap2.width * 0.84),
-        Math.round(ap2.height * 0.62),
-        466,
-        28,
-        388,
-        472
-      );
-    }
-    finishParchmentSpread(p2.g, W, H, "II");
-
-    // Plate III: Uploaded Image 3 (49. Череп, cranium; вид справа)
-    const p3 = createParchmentPage(W, H, "III");
-    if (ap3) {
-      // Left page: full Sinelnikov page (Ossa skeleti axialis header + skull + caption)
-      drawImageFitMultiply(p3.g, ap3, 0, 0, ap3.width, ap3.height, 26, 48, 388, 456);
-      // Right page: large magnified view of the colored skull (49. Череп, cranium; вид справа)
-      drawImageFitMultiply(
-        p3.g,
-        ap3,
-        Math.round(ap3.width * 0.1),
-        Math.round(ap3.height * 0.26),
-        Math.round(ap3.width * 0.82),
-        Math.round(ap3.height * 0.56),
-        466,
-        28,
-        388,
-        472
-      );
-    }
-    finishParchmentSpread(p3.g, W, H, "III");
-
-    return [p1.c, p2.c, p3.c];
+    return pairs.map(([roman, leftImg, rightImg]) => {
+      const page = createParchmentPage(W, H, roman);
+      if (leftImg) {
+        drawImageFitMultiply(page.g, leftImg, 0, 0, leftImg.width, leftImg.height, 28, 44, 386, 456);
+      }
+      if (rightImg) {
+        drawImageFitMultiply(page.g, rightImg, 0, 0, rightImg.width, rightImg.height, 466, 44, 386, 456);
+      }
+      finishParchmentSpread(page.g, W, H, roman);
+      return page.c;
+    });
   }
 
   class DeskBook {
@@ -2028,12 +1991,23 @@
       this.isPulled = false;
 
       this.plateIndex = 0;
+      this.prevPlateIndex = 0;
       this.flipAnim = 0;
+      this.flipDir = 1;
       this.plates = buildAtlasPlates(plateImgs);
     }
 
     nextPlate() {
+      this.prevPlateIndex = this.plateIndex;
       this.plateIndex = (this.plateIndex + 1) % this.plates.length;
+      this.flipDir = 1;
+      this.flipAnim = 1.0;
+    }
+
+    prevPlate() {
+      this.prevPlateIndex = this.plateIndex;
+      this.plateIndex = (this.plateIndex - 1 + this.plates.length) % this.plates.length;
+      this.flipDir = -1;
       this.flipAnim = 1.0;
     }
 
@@ -2052,12 +2026,26 @@
       return { dx: 6 * p, dy: -6 * p, scale: 1 + 0.04 * p };
     }
 
+    getCloseBtnPos() {
+      const { cx, cy, topW, h } = this.getOpenRect();
+      return { x: cx + topW * 0.5 + 8, y: cy - h * 0.5 - 6, r: 12 };
+    }
+
+    getOpenHitZone(sx, sy) {
+      if (!this.isPulled || this.pull < 0.5) return null;
+      const btn = this.getCloseBtnPos();
+      const dx = sx - btn.x;
+      const dy = sy - btn.y;
+      if (dx * dx + dy * dy <= (btn.r + 5) * (btn.r + 5)) {
+        return "close";
+      }
+      if (!this.hitTest(sx, sy)) return null;
+      const { cx } = this.getOpenRect();
+      return sx >= cx ? "next" : "prev";
+    }
+
     isCornerHit(sx, sy) {
-      if (!this.isPulled || this.pull < 0.75) return false;
-      const { cx, cy, botW, h } = this.getOpenRect();
-      const rx = cx + botW * 0.5;
-      const ry = cy + h * 0.5;
-      return sx >= rx - 46 && sx <= rx + 12 && sy >= ry - 44 && sy <= ry + 12;
+      return this.getOpenHitZone(sx, sy) === "next";
     }
 
     hitTest(sx, sy) {
@@ -2081,11 +2069,37 @@
       this.vel += force * dt;
       this.pull = clamp(this.pull + this.vel * dt, 0, 1.1);
       if (this.flipAnim > 0) {
-        this.flipAnim = Math.max(0, this.flipAnim - dt * 3.1);
+        this.flipAnim = Math.max(0, this.flipAnim - dt * 2.35);
       }
     }
 
-    drawOpenFolio(ctx, isHovered, isCornerHovered) {
+    drawSpreadHalf(ctx, plate, side, cx, topY, botY, topW, botW) {
+      const slices = 24;
+      const srcH = plate.height / slices;
+      const halfSrcW = plate.width * 0.5;
+      const srcX = side === "left" ? 0 : halfSrcW;
+      for (let i = 0; i < slices; i++) {
+        const v0 = i / slices;
+        const v1 = (i + 1) / slices;
+        const y0 = lerp(topY, botY, v0);
+        const y1 = lerp(topY, botY, v1);
+        const halfW = lerp(topW, botW, (v0 + v1) * 0.5) * 0.5;
+        const destX = side === "left" ? cx - halfW : cx;
+        ctx.drawImage(
+          plate,
+          srcX,
+          i * srcH,
+          halfSrcW,
+          srcH + 0.6,
+          destX,
+          y0,
+          halfW,
+          y1 - y0 + 0.5
+        );
+      }
+    }
+
+    drawOpenFolio(ctx, isHovered, hoverZone = null) {
       const { cx, cy, topW, botW, h, ease } = this.getOpenRect();
       const topY = cy - h * 0.5;
       const botY = cy + h * 0.5;
@@ -2138,29 +2152,19 @@
 
       // Project two-page anatomical plate smoothly in trapezoid perspective!
       const plate = this.plates[this.plateIndex];
+      const prevPlate = this.plates[this.prevPlateIndex] || plate;
       const pageReveal = smoothstep(0.18, 0.62, ease);
       if (pageReveal > 0.01) {
         ctx.save();
         ctx.globalAlpha = openAlpha * pageReveal;
-        const slices = 24;
-        const srcH = plate.height / slices;
-        for (let i = 0; i < slices; i++) {
-          const v0 = i / slices;
-          const v1 = (i + 1) / slices;
-          const y0 = lerp(topY, botY, v0);
-          const y1 = lerp(topY, botY, v1);
-          const wSlice = lerp(topW, botW, (v0 + v1) * 0.5);
-          ctx.drawImage(
-            plate,
-            0,
-            i * srcH,
-            plate.width,
-            srcH + 0.6,
-            cx - wSlice * 0.5,
-            y0,
-            wSlice,
-            y1 - y0 + 0.5
-          );
+        if (this.flipAnim > 0.01) {
+          const leftPlate = this.flipDir >= 0 ? prevPlate : plate;
+          const rightPlate = this.flipDir >= 0 ? plate : prevPlate;
+          this.drawSpreadHalf(ctx, leftPlate, "left", cx, topY, botY, topW, botW);
+          this.drawSpreadHalf(ctx, rightPlate, "right", cx, topY, botY, topW, botW);
+        } else {
+          this.drawSpreadHalf(ctx, plate, "left", cx, topY, botY, topW, botW);
+          this.drawSpreadHalf(ctx, plate, "right", cx, topY, botY, topW, botW);
         }
         ctx.restore();
       }
@@ -2185,20 +2189,55 @@
         ctx.restore();
       }
 
-      // Animated single-page turn curl when switching plates
+      // Realistic turning parchment leaf with curved shading & shadow sweep
       if (this.flipAnim > 0.01) {
-        const ft = 1.0 - this.flipAnim;
-        const fCos = Math.cos(ft * Math.PI);
-        const fLift = Math.sin(ft * Math.PI) * 18;
+        const ft = smoothstep(0, 1, 1.0 - this.flipAnim);
+        const angle = this.flipDir >= 0 ? ft * Math.PI : (1.0 - ft) * Math.PI;
+        const fCos = Math.cos(angle);
+        const fSin = Math.sin(angle);
+        const fLift = fSin * 20;
+
         ctx.save();
-        ctx.fillStyle = fCos >= 0 ? "rgba(244, 228, 194, 0.92)" : "rgba(225, 204, 162, 0.92)";
-        ctx.strokeStyle = "#5c361a";
+        const shGrad = ctx.createLinearGradient(cx, topY, cx + botW * 0.5 * fCos, topY);
+        shGrad.addColorStop(0, `rgba(22, 11, 4, ${0.34 * fSin})`);
+        shGrad.addColorStop(1, "rgba(22, 11, 4, 0)");
+        ctx.fillStyle = shGrad;
+        ctx.beginPath();
+        ctx.moveTo(cx, topY);
+        ctx.lineTo(cx + topW * 0.5 * (fCos >= 0 ? 1 : -1), topY);
+        ctx.lineTo(cx + botW * 0.5 * (fCos >= 0 ? 1 : -1), botY);
+        ctx.lineTo(cx, botY);
+        ctx.closePath();
+        ctx.fill();
+
+        const leafGrad = ctx.createLinearGradient(cx, topY, cx + botW * 0.5 * fCos, topY);
+        if (fCos >= 0) {
+          leafGrad.addColorStop(0, "#d8be8f");
+          leafGrad.addColorStop(0.55, "#f3e3be");
+          leafGrad.addColorStop(1, "#e7d2a5");
+        } else {
+          leafGrad.addColorStop(0, "#cbb080");
+          leafGrad.addColorStop(0.55, "#e6d2a6");
+          leafGrad.addColorStop(1, "#d9c090");
+        }
+        ctx.fillStyle = leafGrad;
+        ctx.strokeStyle = "rgba(80, 46, 22, 0.85)";
         ctx.lineWidth = 1.0;
         ctx.beginPath();
         ctx.moveTo(cx, topY);
-        ctx.lineTo(cx + topW * 0.5 * fCos, topY - fLift);
-        ctx.lineTo(cx + botW * 0.5 * fCos, botY - fLift);
-        ctx.lineTo(cx, botY);
+        ctx.quadraticCurveTo(
+          cx + topW * 0.28 * fCos,
+          topY - fLift * 1.15,
+          cx + topW * 0.5 * fCos,
+          topY - fLift
+        );
+        ctx.lineTo(cx + botW * 0.5 * fCos, botY - fLift * 0.85);
+        ctx.quadraticCurveTo(
+          cx + botW * 0.28 * fCos,
+          botY - fLift * 0.95,
+          cx,
+          botY
+        );
         ctx.closePath();
         ctx.fill();
         ctx.stroke();
@@ -2233,20 +2272,50 @@
       ctx.fill();
       ctx.stroke();
 
-      // Subtle lifted lower-right page corner cue to flip plates
+      // Subtle lifted lower-left & lower-right page corners + crisp close button when open
       if (ease > 0.72) {
+        const lx = cx - botW * 0.5;
         const rx = cx + botW * 0.5;
         const ry = botY;
+
         ctx.save();
-        ctx.fillStyle = isCornerHovered ? "#ffe6a6" : "#ead19d";
+        ctx.fillStyle = hoverZone === "next" ? "#fff0be" : "#ead19d";
         ctx.strokeStyle = "#3c200e";
         ctx.lineWidth = 1.0;
         ctx.beginPath();
-        ctx.moveTo(rx - 15, ry);
-        ctx.lineTo(rx, ry - 15);
-        ctx.lineTo(rx - 3, ry - 2);
+        ctx.moveTo(rx - 18, ry);
+        ctx.lineTo(rx, ry - 18);
+        ctx.lineTo(rx - 3, ry - 3);
         ctx.closePath();
         ctx.fill();
+        ctx.stroke();
+
+        ctx.fillStyle = hoverZone === "prev" ? "#fff0be" : "#e5cb94";
+        ctx.beginPath();
+        ctx.moveTo(lx + 18, ry);
+        ctx.lineTo(lx, ry - 18);
+        ctx.lineTo(lx + 3, ry - 3);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        const btn = this.getCloseBtnPos();
+        ctx.fillStyle = hoverZone === "close" ? "rgba(180, 62, 42, 0.95)" : "rgba(32, 18, 10, 0.85)";
+        ctx.strokeStyle = hoverZone === "close" ? "#ffe6a6" : "rgba(228, 181, 106, 0.7)";
+        ctx.lineWidth = 1.2;
+        ctx.beginPath();
+        ctx.arc(btn.x, btn.y, 9.5, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.stroke();
+
+        ctx.strokeStyle = "#fff2d2";
+        ctx.lineWidth = 1.5;
+        ctx.lineCap = "round";
+        ctx.beginPath();
+        ctx.moveTo(btn.x - 3.4, btn.y - 3.4);
+        ctx.lineTo(btn.x + 3.4, btn.y + 3.4);
+        ctx.moveTo(btn.x + 3.4, btn.y - 3.4);
+        ctx.lineTo(btn.x - 3.4, btn.y + 3.4);
         ctx.stroke();
         ctx.restore();
       }
@@ -2254,7 +2323,7 @@
       ctx.restore();
     }
 
-    draw(ctx, isHovered, isCornerHovered = false) {
+    draw(ctx, isHovered, hoverZone = null) {
       const p = this.pull;
       if (p < 0.004 && !isHovered) {
         ctx.drawImage(this.img, this.x1, this.y1, this.w, this.h);
@@ -2300,7 +2369,7 @@
       }
 
       if (p >= 0.06) {
-        this.drawOpenFolio(ctx, isHovered, isCornerHovered);
+        this.drawOpenFolio(ctx, isHovered, hoverZone);
       }
     }
   }
@@ -3047,15 +3116,23 @@
         })
       );
 
-      // Load interactive desk atlas ("Атлас анатомии человека") with the 3 uploaded Sinelnikov plates
+      // Load interactive desk atlas ("Атлас анатомии человека") with 10 unique anatomical plates (5 non-repeating spreads)
       if (this.bundle.deskBook && imgs.desk_book) {
-        const [dbImg, ap1, ap2, ap3] = await Promise.all([
+        const safeLoad = (src) => loadImage(src).catch(() => null);
+        const [dbImg, ...atlasImgs] = await Promise.all([
           loadImage(imgs.desk_book),
-          loadImage(imgs.atlas_plate_1 || "assets/atlas_plate_1.jpg"),
-          loadImage(imgs.atlas_plate_2 || "assets/atlas_plate_2.jpg"),
-          loadImage(imgs.atlas_plate_3 || "assets/atlas_plate_3.jpg"),
+          safeLoad(imgs.atlas_plate_1 || "assets/atlas_plate_1.jpg"),
+          safeLoad(imgs.atlas_plate_2 || "assets/atlas_plate_2.jpg"),
+          safeLoad(imgs.atlas_plate_3 || "assets/atlas_plate_3.jpg"),
+          safeLoad("assets/atlas_plate_4.jpg"),
+          safeLoad("assets/atlas_plate_5.jpg"),
+          safeLoad("assets/atlas_plate_6.jpg"),
+          safeLoad("assets/atlas_plate_7.jpg"),
+          safeLoad("assets/atlas_plate_8.jpg"),
+          safeLoad("assets/atlas_plate_9.jpg"),
+          safeLoad("assets/atlas_plate_10.jpg"),
         ]);
-        this.deskBook = new DeskBook(this.bundle.deskBook, dbImg, [ap1, ap2, ap3]);
+        this.deskBook = new DeskBook(this.bundle.deskBook, dbImg, atlasImgs);
       }
 
       this.resizeCanvas();
@@ -3174,19 +3251,44 @@
           }
         }
 
-        // 3b. Desk atlas click -> turn plate on corner click or open/close the folio
-        if (this.deskBook && this.deskBook.isCornerHit(bx, by)) {
-          this.turnDeskAtlasPage();
-          return;
-        }
-        if (this.deskBook && this.deskBook.hitTest(bx, by)) {
-          toggleVolume(this.deskBook);
-          return;
+        // 3b. Desk atlas click -> effortless flipping (right = next, left = prev, × = close) without dossier card
+        if (this.deskBook) {
+          if (this.deskBook.isPulled) {
+            const zone = this.deskBook.getOpenHitZone(bx, by);
+            if (zone === "close") {
+              this.deskBook.isPulled = false;
+              this.audio.playBookSlide(false);
+              this.updateBooksButtonLabel();
+              return;
+            }
+            if (zone === "next") {
+              this.turnDeskAtlasPage(1);
+              return;
+            }
+            if (zone === "prev") {
+              this.turnDeskAtlasPage(-1);
+              return;
+            }
+          } else if (this.deskBook.hitTest(bx, by)) {
+            this.deskBook.isPulled = true;
+            this.audio.playBookSlide(true);
+            this.closeDossier();
+            this.updateBooksButtonLabel();
+            return;
+          }
         }
 
         // 4. Desk lamp click -> toggle lighting mode
         if (this.hitTestLamp(bx, by)) {
           this.toggleNightMode();
+          return;
+        }
+
+        // 5. Clicking empty desk area closes open atlas
+        if (this.deskBook && this.deskBook.isPulled) {
+          this.deskBook.isPulled = false;
+          this.audio.playBookSlide(false);
+          this.updateBooksButtonLabel();
         }
       });
 
@@ -3282,8 +3384,9 @@
       this.hoveredHourglass = this.hourglass.hitTest(bx, by);
       this.hoveredPlanet = null;
       this.hoveredBook = null;
-      this.hoveredDeskBookCorner = this.deskBook ? this.deskBook.isCornerHit(bx, by) : false;
-      this.hoveredDeskBook = this.deskBook ? this.deskBook.hitTest(bx, by) : false;
+      this.hoveredDeskBookZone = this.deskBook ? this.deskBook.getOpenHitZone(bx, by) : null;
+      this.hoveredDeskBookCorner = this.hoveredDeskBookZone === "next";
+      this.hoveredDeskBook = this.deskBook ? (Boolean(this.hoveredDeskBookZone) || this.deskBook.hitTest(bx, by)) : false;
       this.hoveredLamp = false;
 
       if (!this.hoveredHourglass) {
@@ -3342,29 +3445,38 @@
             ? "Click to pull volume"
             : "Нажмите, чтобы выдвинуть том";
         this.showTooltip(copy.title, verb, clientX, clientY);
-      } else if (this.hoveredDeskBookCorner && this.deskBook) {
+      } else if (this.hoveredDeskBookZone && this.deskBook) {
         this.canvas.style.cursor = "pointer";
-        const info = ATLAS_PLATES[this.deskBook.plateIndex];
-        this.showTooltip(
-          isEn
-            ? `Atlas of Anatomy · Plate ${info.roman}`
-            : `Атлас анатомии · Табл. ${info.roman}`,
-          isEn
-            ? "Click the page corner to turn plate"
-            : "Нажмите на уголок страницы, чтобы перелистнуть",
-          clientX,
-          clientY
-        );
+        const info = ATLAS_PLATES[this.deskBook.plateIndex] || ATLAS_PLATES[0];
+        if (this.hoveredDeskBookZone === "close") {
+          this.showTooltip(
+            isEn ? "Atlas of Human Anatomy" : "Атлас анатомии человека",
+            isEn ? "Click to close atlas" : "Нажмите, чтобы закрыть атлас",
+            clientX,
+            clientY
+          );
+        } else {
+          const dirHint =
+            this.hoveredDeskBookZone === "next"
+              ? isEn
+                ? "Click right page for next plate →"
+                : "Нажмите справа — следующий разворот →"
+              : isEn
+                ? "← Click left page for previous plate"
+                : "← Нажмите слева — предыдущий разворот";
+          this.showTooltip(
+            isEn
+              ? `Plate ${info.roman} / V`
+              : `Табл. ${info.roman} / V`,
+            dirHint,
+            clientX,
+            clientY
+          );
+        }
       } else if (this.hoveredDeskBook && this.deskBook) {
         this.canvas.style.cursor = "pointer";
         const copy = this.getBookCopy(this.deskBook);
-        const verb = this.deskBook.isPulled
-          ? isEn
-            ? "Click to close atlas (or top-right corner to turn plate)"
-            : "Нажмите, чтобы закрыть атлас (или по правому углу — листать)"
-          : isEn
-            ? "Click to open atlas"
-            : "Нажмите, чтобы открыть атлас";
+        const verb = isEn ? "Click to open atlas" : "Нажмите, чтобы открыть атлас";
         this.showTooltip(copy.title, verb, clientX, clientY);
       } else if (this.hoveredLamp) {
         this.canvas.style.cursor = "pointer";
@@ -3401,20 +3513,23 @@
       this.tooltip.classList.remove("visible");
     }
 
-    turnDeskAtlasPage() {
+    turnDeskAtlasPage(dir = 1) {
       if (!this.deskBook) return;
       if (!this.deskBook.isPulled) {
         this.deskBook.isPulled = true;
       }
-      this.deskBook.nextPlate();
+      if (dir >= 0) {
+        this.deskBook.nextPlate();
+      } else {
+        this.deskBook.prevPlate();
+      }
       this.audio.playBookSlide(true);
-      const info = ATLAS_PLATES[this.deskBook.plateIndex];
+      const info = ATLAS_PLATES[this.deskBook.plateIndex] || ATLAS_PLATES[0];
       const plateName = this.getAtlasPlateName(this.deskBook.plateIndex);
-      this.openDossier(this.deskBook);
       this.showToast(
         this.lang === "en"
-          ? `Plate ${info.roman}: ${plateName}`
-          : `Табл. ${info.roman}: ${plateName}`
+          ? `Plate ${info.roman}/V · ${plateName}`
+          : `Табл. ${info.roman}/V · ${plateName}`
       );
     }
 
@@ -3721,7 +3836,7 @@
       ctx.scale(1.01, 1.01);
       ctx.translate(-SCENE_W * 0.5, -SCENE_H * 0.5);
       if (this.deskBook) {
-        this.deskBook.draw(ctx, this.hoveredDeskBook, this.hoveredDeskBookCorner);
+        this.deskBook.draw(ctx, this.hoveredDeskBook, this.hoveredDeskBookZone);
       }
       this.hourglass.draw(ctx, this.timeScale, flicker, this.nightMix);
       ctx.restore();
