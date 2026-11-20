@@ -3192,15 +3192,15 @@
       }
 
       // Wide desktop viewport:
-      // Fill full width while keeping the gentleman's full figure (head ~135px to hands ~566px) visible;
-      // the lower part of the desk may be cropped on wide screens.
-      const SAFE_TOP = 115;
-      const SAFE_FIGURE_BOTTOM = 570;
-      const MIN_VISIBLE_H = SAFE_FIGURE_BOTTOM - SAFE_TOP; // 455px
+      // Keep gentleman's head (top ~135px -> safe top 118px) AND front edge of atlas (658px) / hourglass base (644px) visible.
+      const SAFE_TOP = 118;
+      const SAFE_BOTTOM = 670;
+      const MIN_VISIBLE_H = SAFE_BOTTOM - SAFE_TOP; // 552px
       const scale = Math.min(cw / SCENE_W, ch / MIN_VISIBLE_H);
       const visibleH = ch / scale;
       const cropTotal = Math.max(0, SCENE_H - visibleH);
-      const topCrop = Math.min(SAFE_TOP, cropTotal * 0.85);
+      const bottomCrop = Math.min(SCENE_H - SAFE_BOTTOM, cropTotal * 0.22);
+      const topCrop = Math.min(SAFE_TOP, cropTotal - bottomCrop);
       return {
         scale,
         offsetX: (cw - SCENE_W * scale) * 0.5,
@@ -3804,6 +3804,51 @@
       ctx.fillStyle = "#120c08";
       ctx.fillRect(0, 0, cw, ch);
 
+      // On ultra-wide monitors where central scene is flanked by side margins,
+      // draw blurred & darkened study wings on the sides while keeping main image sharp.
+      if (offsetX > 1 && this.bgStudyImg) {
+        const sceneWpx = SCENE_W * scale;
+        const sceneHpx = SCENE_H * scale;
+
+        ctx.save();
+        ctx.filter = "blur(12px)";
+        // Left mirrored wing
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, offsetX + 2, ch);
+        ctx.clip();
+        ctx.translate(offsetX, offsetY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
+        ctx.restore();
+
+        // Right mirrored wing
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(offsetX + sceneWpx - 2, 0, cw - (offsetX + sceneWpx) + 2, ch);
+        ctx.clip();
+        ctx.translate(offsetX + sceneWpx * 2, offsetY);
+        ctx.scale(-1, 1);
+        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
+        ctx.restore();
+        ctx.restore();
+
+        // Darkening gradient over the blurred side wings
+        const wingDark = 0.42 + this.nightMix * 0.16;
+        const leftShade = ctx.createLinearGradient(0, 0, offsetX + 2, 0);
+        leftShade.addColorStop(0, "rgba(10, 7, 5, 0.88)");
+        leftShade.addColorStop(1, `rgba(14, 9, 6, ${wingDark})`);
+        ctx.fillStyle = leftShade;
+        ctx.fillRect(0, 0, offsetX + 2, ch);
+
+        const rightStart = offsetX + sceneWpx - 2;
+        const rightShade = ctx.createLinearGradient(rightStart, 0, cw, 0);
+        rightShade.addColorStop(0, `rgba(14, 9, 6, ${wingDark})`);
+        rightShade.addColorStop(1, "rgba(10, 7, 5, 0.88)");
+        ctx.fillStyle = rightShade;
+        ctx.fillRect(rightStart, 0, cw - rightStart, ch);
+      }
+
       if (offsetX > 1) {
         ctx.beginPath();
         ctx.rect(offsetX, 0, SCENE_W * scale, ch);
@@ -3936,20 +3981,21 @@
       ctx.fillStyle = vig;
       ctx.fillRect(0, 0, SCENE_W, SCENE_H);
 
-      // Soft fade into darkness on left & right edges only on extreme ultra-wide monitors
+      // Smooth transition from sharp main image into the darkened blur at the left & right edges
       if (offsetX > 1) {
-        const edgeW = 48;
+        const edgeW = 64;
+        const seamDark = 0.42 + this.nightMix * 0.16;
         const leftFade = ctx.createLinearGradient(0, 0, edgeW, 0);
-        leftFade.addColorStop(0, "rgba(18, 12, 8, 1)");
-        leftFade.addColorStop(0.45, "rgba(18, 12, 8, 0.48)");
-        leftFade.addColorStop(1, "rgba(18, 12, 8, 0)");
+        leftFade.addColorStop(0, `rgba(14, 9, 6, ${seamDark})`);
+        leftFade.addColorStop(0.4, `rgba(14, 9, 6, ${seamDark * 0.45})`);
+        leftFade.addColorStop(1, "rgba(14, 9, 6, 0)");
         ctx.fillStyle = leftFade;
         ctx.fillRect(0, 0, edgeW, SCENE_H);
 
         const rightFade = ctx.createLinearGradient(SCENE_W - edgeW, 0, SCENE_W, 0);
-        rightFade.addColorStop(0, "rgba(18, 12, 8, 0)");
-        rightFade.addColorStop(0.55, "rgba(18, 12, 8, 0.48)");
-        rightFade.addColorStop(1, "rgba(18, 12, 8, 1)");
+        rightFade.addColorStop(0, "rgba(14, 9, 6, 0)");
+        rightFade.addColorStop(0.6, `rgba(14, 9, 6, ${seamDark * 0.45})`);
+        rightFade.addColorStop(1, `rgba(14, 9, 6, ${seamDark})`);
         ctx.fillStyle = rightFade;
         ctx.fillRect(SCENE_W - edgeW, 0, edgeW, SCENE_H);
       }
