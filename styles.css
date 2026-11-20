@@ -1079,15 +1079,15 @@ body {
 }
 
 .dg-sage-conn-badge[data-status="connected"] {
-  color: #9ce6b0;
-  background: rgba(82, 196, 122, 0.12);
-  border-color: rgba(82, 196, 122, 0.34);
+  color: #ebd29d;
+  background: rgba(228, 181, 106, 0.14);
+  border-color: rgba(228, 181, 106, 0.38);
 }
 
 .dg-sage-conn-badge[data-status="offline"] {
-  color: #f3b88c;
-  background: rgba(232, 134, 72, 0.12);
-  border-color: rgba(232, 134, 72, 0.34);
+  color: #cbb07a;
+  background: rgba(20, 15, 10, 0.6);
+  border-color: rgba(228, 181, 106, 0.22);
 }
 
 .dg-sage-conn-dot {

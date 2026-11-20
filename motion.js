@@ -675,29 +675,29 @@
       inq_btn: "@DRGII В TELEGRAM",
       closing_quote: "«Страница заканчивается. Диалог — никогда.»",
       closing_author: "— DR. GII",
-      sage_eyebrow: "ЖИВОЙ ОРАКУЛ · ИИ-ФИЛОСОФ",
+      sage_eyebrow: "ЖИВОЙ ОРАКУЛ · БЕСЕДА С ВЕЧНОСТЬЮ",
       sage_h2_1: "Диалог с",
       sage_h2_2: "Хранителем",
       sage_h2_3: "Песка и Времени.",
       sage_lead:
-        "Спросите Песочного Философа о времени, предназначении, тишине и искусстве возводить вечное из ускользающих мгновений. Живой аватар реагирует на ваши слова, а ответы формирует подключённая ИИ-модель.",
-      sage_state_idle: "СЛУШАЕТ ТЕЧЕНИЕ ПЕСКА",
-      sage_state_listening: "ВНИМАЕТ ВОПРОСУ",
+        "Спросите Песочного Философа о времени, предназначении, тишине и искусстве созидания. Его сознание соткано из золотого песка и созерцания тысячелетий.",
+      sage_state_idle: "БЕЗМОЛВИЕ ПЕСКОВ",
+      sage_state_listening: "ФИЛОСОФ СЛУШАЕТ",
       sage_state_thinking: "СОБИРАЕТ ПЕСЧИНКИ МЫСЛИ...",
-      sage_state_speaking: "ГОВОРИТ СКВОЗЬ ВРЕМЯ",
-      sage_sound_off: "ЗВУК ВЫКЛ",
-      sage_sound_on: "ЗВУК ВКЛ",
-      sage_name: "ХРОНОС · ПЕСОЧНЫЙ МУДРЕЦ",
-      sage_conn_ready: "n8n ИИ · Готов",
-      sage_conn_connected: "n8n ИИ · Онлайн",
-      sage_conn_offline: "n8n Webhook не активен",
-      sage_cfg_label: "URL вебхука n8n:",
-      sage_cfg_save: "Сохранить URL",
-      sage_cfg_test: "Проверить связь",
+      sage_state_speaking: "ГОЛОС СКВОЗЬ ВРЕМЯ",
+      sage_sound_off: "РЕЗОНАНС: ВЫКЛ",
+      sage_sound_on: "РЕЗОНАНС: ВКЛ",
+      sage_name: "ХРОНОС · ХРАНИТЕЛЬ ПЕСКА",
+      sage_conn_ready: "ФИЛОСОФ СЛУШАЕТ",
+      sage_conn_connected: "ФИЛОСОФ СЛУШАЕТ",
+      sage_conn_offline: "ТИХОЕ СОЗЕРЦАНИЕ",
+      sage_cfg_label: "Канал связи оракула (URL):",
+      sage_cfg_save: "Настроить связь",
+      sage_cfg_test: "Проверить отклик",
       sage_q1: "Как возвести пирамиду из ускользающего песка?",
       sage_q2: "Почему с годами время течёт быстрее?",
       sage_q3: "Где скрыта мудрость между тишиной и звуком?",
-      sage_placeholder: "Задайте вопрос Песочному Философу...",
+      sage_placeholder: "Обратитесь к Песочному Философу...",
       sage_send: "✦ СПРОСИТЬ",
     },
     en: {
@@ -768,30 +768,30 @@
       inq_btn: "@DRGII ON TELEGRAM",
       closing_quote: '"The page ends. The conversation doesn\'t."',
       closing_author: "— DR. GII",
-      sage_eyebrow: "LIVING ORACLE · AI PHILOSOPHER",
+      sage_eyebrow: "LIVING ORACLE · CONVERSATION WITH ETERNITY",
       sage_h2_1: "Dialogue with the",
       sage_h2_2: "Sand Sage",
       sage_h2_3: "of Eternity.",
       sage_lead:
-        "Ask the Sand Philosopher about time, purpose, silence, or the art of building something enduring from fleeting moments. Powered by a live AI consciousness woven into living grains of gold.",
-      sage_state_idle: "LISTENING TO THE SANDS",
-      sage_state_listening: "ATTENDING YOUR THOUGHT",
+        "Ask the Sand Philosopher about time, purpose, silence, and the craft of creation. His consciousness is woven from golden sand and millennia of contemplation.",
+      sage_state_idle: "SILENCE OF THE SANDS",
+      sage_state_listening: "THE SAGE IS LISTENING",
       sage_state_thinking: "GATHERING GRAINS OF THOUGHT...",
-      sage_state_speaking: "SPEAKING ACROSS TIME",
-      sage_sound_off: "SOUND OFF",
-      sage_sound_on: "SOUND ON",
+      sage_state_speaking: "VOICE ACROSS TIME",
+      sage_sound_off: "RESONANCE: OFF",
+      sage_sound_on: "RESONANCE: ON",
       sage_name: "CHRONOS · KEEPER OF SAND",
-      sage_conn_ready: "n8n AI · Ready",
-      sage_conn_connected: "n8n AI · Online",
-      sage_conn_offline: "n8n Webhook Offline",
-      sage_cfg_label: "n8n AI Webhook URL:",
-      sage_cfg_save: "Save URL",
-      sage_cfg_test: "Ping Webhook",
+      sage_conn_ready: "THE SAGE IS LISTENING",
+      sage_conn_connected: "THE SAGE IS LISTENING",
+      sage_conn_offline: "QUIET CONTEMPLATION",
+      sage_cfg_label: "Oracle Channel Endpoint (URL):",
+      sage_cfg_save: "Attune Channel",
+      sage_cfg_test: "Test Resonance",
       sage_q1: "How do you build a pyramid from fleeting sand?",
       sage_q2: "Why does time slip faster as we grow older?",
       sage_q3: "Where is wisdom hidden between silence and sound?",
-      sage_placeholder: "Ask the Sand Sage a question...",
-      sage_send: "✦ ASK",
+      sage_placeholder: "Speak to the Sand Philosopher...",
+      sage_send: "✦ INQUIRE",
     },
   };
 
@@ -3253,7 +3253,7 @@
 
     async pingWebhook() {
       const target = (this.webhookInputEl ? this.webhookInputEl.value.trim() : "") || this.webhookUrl;
-      this.setConfigHint(this.lang === "ru" ? "Проверка..." : "Pinging...");
+      this.setConfigHint(this.lang === "ru" ? "Прислушиваемся..." : "Attuning...");
       try {
         const res = await fetch(target, {
           method: "POST",
@@ -3268,13 +3268,13 @@
         });
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         this.setConnectionStatus("connected");
-        this.setConfigHint(this.lang === "ru" ? "✓ Соединение активно" : "✓ Connected");
+        this.setConfigHint(this.lang === "ru" ? "✓ Отклик подтверждён" : "✓ Resonance confirmed");
       } catch (err) {
         this.setConnectionStatus("offline");
         this.setConfigHint(
           this.lang === "ru"
-            ? `Ошибка (${err.message}). Проверьте сценарий в n8n.`
-            : `Offline (${err.message}). Activate workflow in n8n.`
+            ? "Канал безмолвен (оракул пребывает в автономном созерцании)"
+            : "Channel silent (oracle resting in contemplative archive)"
         );
       }
     }
@@ -3357,11 +3357,10 @@
         // Seamless fallback to the Sand Sage's inner eternal wisdom archive
         // so the conversation never breaks even before n8n is fully configured!
         const fallbackReply = this.generateLocalWisdom(text, this.lang);
-        const errDetail = err && err.message ? err.message : "";
         const noticeSuffix =
           this.lang === "ru"
-            ? `\n\n✦ [Автономная мудрость оракула. Для подключения живой модели GPT укажите ваш API-ключ в узле «LLM Philosopher API» в n8n или в ⚙ выше].`
-            : `\n\n✦ [Oracle inner archive. To link live GPT model, configure your API key inside n8n node "LLM Philosopher API" or in ⚙ above].`;
+            ? `\n\n✦ Из свитков вечной мудрости кабинета.`
+            : `\n\n✦ From the eternal wisdom scrolls of the study.`;
         const fullReply = fallbackReply + noticeSuffix;
 
         this.history.push({ role: "assistant", content: fullReply });

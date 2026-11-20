@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css?v=21" />
+  <link rel="stylesheet" href="styles.css?v=23" />
 </head>
 <body>
   <!-- =========================================================
@@ -189,7 +189,7 @@
         <div class="dg-sage-header">
           <div class="dg-eyebrow">
             <span class="dg-eyebrow-line"></span>
-            <span class="dg-eyebrow-text" data-i18n="sage_eyebrow">LIVING ORACLE · AI PHILOSOPHER</span>
+            <span class="dg-eyebrow-text" data-i18n="sage_eyebrow">LIVING ORACLE · CONVERSATION WITH ETERNITY</span>
           </div>
 
           <h2 class="dg-heading">
@@ -199,7 +199,7 @@
           </h2>
 
           <p class="dg-sage-lead" data-i18n="sage_lead">
-            Ask the Sand Philosopher about time, purpose, silence, or the art of building something enduring from fleeting moments. Powered by a live AI consciousness woven into living grains of gold.
+            Ask the Sand Philosopher about time, purpose, silence, and the craft of creation. His consciousness is woven from golden sand and millennia of contemplation.
           </p>
         </div>
 
@@ -211,11 +211,11 @@
               <div class="dg-sage-avatar-hud">
                 <div class="dg-sage-state-pill" id="sageStatePill">
                   <span class="dg-sage-pulse-dot" id="sagePulseDot"></span>
-                  <span id="sageStateLabel" data-i18n="sage_state_idle">LISTENING TO THE SANDS</span>
+                  <span id="sageStateLabel" data-i18n="sage_state_idle">SILENCE OF THE SANDS</span>
                 </div>
                 <button type="button" id="sageAudioToggle" class="dg-sage-audio-btn" title="Toggle Sand Resonance Sound" aria-pressed="false">
                   <span class="dg-sage-audio-icon" aria-hidden="true">♪</span>
-                  <span data-i18n="sage_sound_off">SOUND OFF</span>
+                  <span data-i18n="sage_sound_off">RESONANCE: OFF</span>
                 </button>
               </div>
             </div>
@@ -229,24 +229,24 @@
                   <div class="dg-sage-chat-name" data-i18n="sage_name">CHRONOS · KEEPER OF SAND</div>
                   <div class="dg-sage-conn-badge" id="sageConnBadge" data-status="ready">
                     <span class="dg-sage-conn-dot"></span>
-                    <span id="sageConnText" data-i18n="sage_conn_ready">n8n AI · Ready</span>
+                    <span id="sageConnText" data-i18n="sage_conn_ready">THE SAGE IS LISTENING</span>
                   </div>
                 </div>
                 <div class="dg-sage-chat-tools">
-                  <button type="button" id="sageConfigBtn" class="dg-sage-tool-btn" title="n8n Webhook Settings" aria-expanded="false">⚙</button>
-                  <button type="button" id="sageResetBtn" class="dg-sage-tool-btn" title="Clear Dialogue">↺</button>
+                  <button type="button" id="sageConfigBtn" class="dg-sage-tool-btn" title="Oracle Channel Settings" aria-expanded="false">⚙</button>
+                  <button type="button" id="sageResetBtn" class="dg-sage-tool-btn" title="Begin Dialogue Anew">↺</button>
                 </div>
               </div>
 
-              <!-- Optional Admin Config Drawer for n8n Webhook -->
+              <!-- Optional Config Drawer for Channel Settings -->
               <div class="dg-sage-config" id="sageConfigDrawer" hidden>
                 <div class="dg-sage-config-row">
-                  <label for="sageWebhookInput" class="dg-sage-config-label" data-i18n="sage_cfg_label">n8n AI Webhook URL:</label>
+                  <label for="sageWebhookInput" class="dg-sage-config-label" data-i18n="sage_cfg_label">Oracle Channel Endpoint (URL):</label>
                   <input type="url" id="sageWebhookInput" class="dg-sage-config-input" placeholder="https://n8n.drgii.ru/webhook/sand-sage" />
                 </div>
                 <div class="dg-sage-config-actions">
-                  <button type="button" id="sageWebhookSave" class="dg-sage-cfg-btn dg-sage-cfg-btn--primary" data-i18n="sage_cfg_save">Save URL</button>
-                  <button type="button" id="sageWebhookTest" class="dg-sage-cfg-btn" data-i18n="sage_cfg_test">Ping Webhook</button>
+                  <button type="button" id="sageWebhookSave" class="dg-sage-cfg-btn dg-sage-cfg-btn--primary" data-i18n="sage_cfg_save">Attune Channel</button>
+                  <button type="button" id="sageWebhookTest" class="dg-sage-cfg-btn" data-i18n="sage_cfg_test">Test Resonance</button>
                   <span id="sageConfigHint" class="dg-sage-config-hint"></span>
                 </div>
               </div>
@@ -276,10 +276,10 @@
                   maxlength="800"
                   autocomplete="off"
                   data-i18n-placeholder="sage_placeholder"
-                  placeholder="Ask the Sand Sage a question..."
+                  placeholder="Speak to the Sand Philosopher..."
                 />
                 <button type="submit" id="sageSendBtn" class="dg-sage-send-btn">
-                  <span data-i18n="sage_send">✦ ASK</span>
+                  <span data-i18n="sage_send">✦ INQUIRE</span>
                 </button>
               </form>
             </div>
@@ -510,6 +510,6 @@
   </div>
 
   <script src="assets/scene_bundle.js?v=6"></script>
-  <script src="motion.js?v=22"></script>
+  <script src="motion.js?v=23"></script>
 </body>
 </html>
