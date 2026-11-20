@@ -675,6 +675,30 @@
       inq_btn: "@DRGII В TELEGRAM",
       closing_quote: "«Страница заканчивается. Диалог — никогда.»",
       closing_author: "— DR. GII",
+      sage_eyebrow: "ЖИВОЙ ОРАКУЛ · ИИ-ФИЛОСОФ",
+      sage_h2_1: "Диалог с",
+      sage_h2_2: "Хранителем",
+      sage_h2_3: "Песка и Времени.",
+      sage_lead:
+        "Спросите Песочного Философа о времени, предназначении, тишине и искусстве возводить вечное из ускользающих мгновений. Живой аватар реагирует на ваши слова, а ответы формирует подключённая ИИ-модель.",
+      sage_state_idle: "СЛУШАЕТ ТЕЧЕНИЕ ПЕСКА",
+      sage_state_listening: "ВНИМАЕТ ВОПРОСУ",
+      sage_state_thinking: "СОБИРАЕТ ПЕСЧИНКИ МЫСЛИ...",
+      sage_state_speaking: "ГОВОРИТ СКВОЗЬ ВРЕМЯ",
+      sage_sound_off: "ЗВУК ВЫКЛ",
+      sage_sound_on: "ЗВУК ВКЛ",
+      sage_name: "ХРОНОС · ПЕСОЧНЫЙ МУДРЕЦ",
+      sage_conn_ready: "n8n ИИ · Готов",
+      sage_conn_connected: "n8n ИИ · Онлайн",
+      sage_conn_offline: "n8n Webhook не активен",
+      sage_cfg_label: "URL вебхука n8n:",
+      sage_cfg_save: "Сохранить URL",
+      sage_cfg_test: "Проверить связь",
+      sage_q1: "Как возвести пирамиду из ускользающего песка?",
+      sage_q2: "Почему с годами время течёт быстрее?",
+      sage_q3: "Где скрыта мудрость между тишиной и звуком?",
+      sage_placeholder: "Задайте вопрос Песочному Философу...",
+      sage_send: "✦ СПРОСИТЬ",
     },
     en: {
       nav_intro: "INTRODUCTION",
@@ -744,6 +768,30 @@
       inq_btn: "@DRGII ON TELEGRAM",
       closing_quote: '"The page ends. The conversation doesn\'t."',
       closing_author: "— DR. GII",
+      sage_eyebrow: "LIVING ORACLE · AI PHILOSOPHER",
+      sage_h2_1: "Dialogue with the",
+      sage_h2_2: "Sand Sage",
+      sage_h2_3: "of Eternity.",
+      sage_lead:
+        "Ask the Sand Philosopher about time, purpose, silence, or the art of building something enduring from fleeting moments. Powered by a live AI consciousness woven into living grains of gold.",
+      sage_state_idle: "LISTENING TO THE SANDS",
+      sage_state_listening: "ATTENDING YOUR THOUGHT",
+      sage_state_thinking: "GATHERING GRAINS OF THOUGHT...",
+      sage_state_speaking: "SPEAKING ACROSS TIME",
+      sage_sound_off: "SOUND OFF",
+      sage_sound_on: "SOUND ON",
+      sage_name: "CHRONOS · KEEPER OF SAND",
+      sage_conn_ready: "n8n AI · Ready",
+      sage_conn_connected: "n8n AI · Online",
+      sage_conn_offline: "n8n Webhook Offline",
+      sage_cfg_label: "n8n AI Webhook URL:",
+      sage_cfg_save: "Save URL",
+      sage_cfg_test: "Ping Webhook",
+      sage_q1: "How do you build a pyramid from fleeting sand?",
+      sage_q2: "Why does time slip faster as we grow older?",
+      sage_q3: "Where is wisdom hidden between silence and sound?",
+      sage_placeholder: "Ask the Sand Sage a question...",
+      sage_send: "✦ ASK",
     },
   };
 
@@ -2876,6 +2924,668 @@
   }
 
   // =========================================================
+  // Living Sand Philosopher Avatar & n8n AI Chat Oracle
+  // =========================================================
+  class SandSageOracle {
+    constructor(initialLang = "en") {
+      this.lang = initialLang === "ru" ? "ru" : "en";
+      this.frameEl = document.getElementById("sandSageFrame");
+      this.canvas = document.getElementById("sandSageCanvas");
+      if (!this.canvas || !this.frameEl) return;
+
+      this.ctx = this.canvas.getContext("2d");
+      this.stateLabelEl = document.getElementById("sageStateLabel");
+      this.connBadgeEl = document.getElementById("sageConnBadge");
+      this.connTextEl = document.getElementById("sageConnText");
+      this.messagesEl = document.getElementById("sageChatMessages");
+      this.formEl = document.getElementById("sageChatForm");
+      this.inputEl = document.getElementById("sageChatInput");
+      this.sendBtnEl = document.getElementById("sageSendBtn");
+      this.configBtnEl = document.getElementById("sageConfigBtn");
+      this.configDrawerEl = document.getElementById("sageConfigDrawer");
+      this.webhookInputEl = document.getElementById("sageWebhookInput");
+      this.webhookSaveEl = document.getElementById("sageWebhookSave");
+      this.webhookTestEl = document.getElementById("sageWebhookTest");
+      this.configHintEl = document.getElementById("sageConfigHint");
+      this.resetBtnEl = document.getElementById("sageResetBtn");
+      this.audioBtnEl = document.getElementById("sageAudioToggle");
+
+      this.defaultWebhook = "https://n8n.drgii.ru/webhook/sand-sage";
+      this.webhookUrl = this.defaultWebhook;
+      try {
+        const savedUrl = localStorage.getItem("drgii_sage_webhook");
+        if (savedUrl && /^https?:\/\//i.test(savedUrl.trim())) {
+          this.webhookUrl = savedUrl.trim();
+        }
+      } catch (e) {}
+
+      this.sessionId = `sage-${Math.random().toString(36).slice(2, 10)}`;
+      this.history = [];
+      this.isBusy = false;
+      this.avatarState = "idle"; // idle | listening | thinking | speaking
+      this.speechTarget = 0;
+      this.speechEnergy = 0;
+      this.audioEnabled = false;
+      this.audioCtx = null;
+
+      // Avatar visual & particle state
+      this.img = null;
+      this.imgReady = false;
+      this.ptrX = 0.5;
+      this.ptrY = 0.45;
+      this.smoothPtrX = 0.5;
+      this.smoothPtrY = 0.45;
+      this.ptrActive = false;
+      this.thinkMix = 0;
+      this.blinkTimer = 3.2;
+      this.blinkVal = 0;
+      this.isVisible = true;
+      this.particles = this.createParticles();
+
+      this.bindUI();
+      this.renderWelcome();
+      this.loadPortrait();
+      this.startLoop();
+    }
+
+    createParticles() {
+      const list = [];
+      // 380 cascading shoulder/cloak sand grains
+      for (let i = 0; i < 380; i++) {
+        const isLeft = i % 2 === 0;
+        const baseX = isLeft ? 0.21 + Math.random() * 0.17 : 0.62 + Math.random() * 0.17;
+        const baseY = 0.38 + Math.random() * 0.56;
+        list.push({
+          kind: "fall",
+          isLeft,
+          u: baseX,
+          v: baseY,
+          vx: (Math.random() - 0.5) * 0.008,
+          vy: 0.045 + Math.random() * 0.075,
+          r: 0.7 + Math.random() * 1.5,
+          alpha: 0.25 + Math.random() * 0.6,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+      // 200 luminous ambient/orbital motes
+      for (let i = 0; i < 200; i++) {
+        list.push({
+          kind: "mote",
+          u: 0.1 + Math.random() * 0.8,
+          v: 0.1 + Math.random() * 0.85,
+          orbitAngle: Math.random() * Math.PI * 2,
+          orbitRadius: 0.18 + Math.random() * 0.2,
+          orbitSpeed: (Math.random() > 0.5 ? 1 : -1) * (0.45 + Math.random() * 0.7),
+          vy: -(0.015 + Math.random() * 0.03),
+          vx: (Math.random() - 0.5) * 0.012,
+          r: 0.9 + Math.random() * 1.9,
+          alpha: 0.22 + Math.random() * 0.55,
+          phase: Math.random() * Math.PI * 2,
+        });
+      }
+      return list;
+    }
+
+    loadPortrait() {
+      const im = new Image();
+      im.onload = () => {
+        this.img = im;
+        this.imgReady = true;
+      };
+      im.src = "assets/sand_philosopher.jpg";
+    }
+
+    bindUI() {
+      this.canvas.addEventListener("pointermove", (e) => {
+        const rect = this.canvas.getBoundingClientRect();
+        this.ptrX = clamp((e.clientX - rect.left) / Math.max(1, rect.width), 0, 1);
+        this.ptrY = clamp((e.clientY - rect.top) / Math.max(1, rect.height), 0, 1);
+        this.ptrActive = true;
+      });
+      this.canvas.addEventListener("pointerleave", () => {
+        this.ptrActive = false;
+      });
+
+      if (this.webhookInputEl) {
+        this.webhookInputEl.value = this.webhookUrl;
+      }
+
+      if (this.configBtnEl && this.configDrawerEl) {
+        this.configBtnEl.addEventListener("click", () => {
+          const isOpen = !this.configDrawerEl.hidden;
+          this.configDrawerEl.hidden = isOpen;
+          this.configBtnEl.setAttribute("aria-expanded", String(!isOpen));
+        });
+      }
+
+      if (this.webhookSaveEl && this.webhookInputEl) {
+        this.webhookSaveEl.addEventListener("click", () => {
+          const val = this.webhookInputEl.value.trim();
+          if (!/^https?:\/\//i.test(val)) {
+            this.setConfigHint(
+              this.lang === "ru" ? "Укажите корректный URL с https://" : "Enter a valid https:// URL"
+            );
+            return;
+          }
+          this.webhookUrl = val;
+          try {
+            localStorage.setItem("drgii_sage_webhook", val);
+          } catch (e) {}
+          this.setConnectionStatus("ready");
+          this.setConfigHint(this.lang === "ru" ? "Сохранено" : "Saved");
+        });
+      }
+
+      if (this.webhookTestEl) {
+        this.webhookTestEl.addEventListener("click", () => this.pingWebhook());
+      }
+
+      if (this.resetBtnEl) {
+        this.resetBtnEl.addEventListener("click", () => {
+          if (this.isBusy) return;
+          this.history = [];
+          this.sessionId = `sage-${Math.random().toString(36).slice(2, 10)}`;
+          this.renderWelcome();
+        });
+      }
+
+      if (this.audioBtnEl) {
+        this.audioBtnEl.addEventListener("click", () => {
+          this.audioEnabled = !this.audioEnabled;
+          this.audioBtnEl.classList.toggle("active", this.audioEnabled);
+          this.audioBtnEl.setAttribute("aria-pressed", String(this.audioEnabled));
+          const span = this.audioBtnEl.querySelector("[data-i18n]");
+          if (span) {
+            const key = this.audioEnabled ? "sage_sound_on" : "sage_sound_off";
+            span.setAttribute("data-i18n", key);
+            span.textContent =
+              (I18N_PAGE[this.lang] && I18N_PAGE[this.lang][key]) ||
+              (this.audioEnabled ? "SOUND ON" : "SOUND OFF");
+          }
+          if (this.audioEnabled) this.playChime(528, 0.28);
+        });
+      }
+
+      if (this.inputEl) {
+        this.inputEl.addEventListener("focus", () => {
+          if (!this.isBusy) this.setAvatarState("listening");
+        });
+        this.inputEl.addEventListener("blur", () => {
+          if (!this.isBusy && !this.inputEl.value.trim()) this.setAvatarState("idle");
+        });
+        this.inputEl.addEventListener("input", () => {
+          if (!this.isBusy) {
+            this.setAvatarState(this.inputEl.value.trim() ? "listening" : "idle");
+          }
+        });
+      }
+
+      if (this.formEl) {
+        this.formEl.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const text = this.inputEl ? this.inputEl.value.trim() : "";
+          if (text) this.sendMessage(text);
+        });
+      }
+
+      document.querySelectorAll(".dg-sage-chip").forEach((chip) => {
+        chip.addEventListener("click", () => {
+          if (this.isBusy) return;
+          const text = chip.textContent.trim();
+          if (text) this.sendMessage(text);
+        });
+      });
+    }
+
+    setLanguage(lang) {
+      if (lang !== "ru" && lang !== "en") return;
+      this.lang = lang;
+      this.setAvatarState(this.avatarState);
+      if (this.history.length === 0) {
+        this.renderWelcome();
+      }
+      if (this.connBadgeEl) {
+        this.setConnectionStatus(this.connBadgeEl.dataset.status || "ready");
+      }
+    }
+
+    setAvatarState(state) {
+      this.avatarState = state;
+      if (this.frameEl) this.frameEl.setAttribute("data-state", state);
+      if (this.stateLabelEl) {
+        const keyMap = {
+          idle: "sage_state_idle",
+          listening: "sage_state_listening",
+          thinking: "sage_state_thinking",
+          speaking: "sage_state_speaking",
+        };
+        const key = keyMap[state] || "sage_state_idle";
+        this.stateLabelEl.setAttribute("data-i18n", key);
+        const dict = I18N_PAGE[this.lang];
+        if (dict && dict[key]) this.stateLabelEl.textContent = dict[key];
+      }
+    }
+
+    setConnectionStatus(status) {
+      if (!this.connBadgeEl || !this.connTextEl) return;
+      this.connBadgeEl.setAttribute("data-status", status);
+      const key =
+        status === "connected"
+          ? "sage_conn_connected"
+          : status === "offline"
+          ? "sage_conn_offline"
+          : "sage_conn_ready";
+      this.connTextEl.setAttribute("data-i18n", key);
+      const dict = I18N_PAGE[this.lang];
+      if (dict && dict[key]) this.connTextEl.textContent = dict[key];
+    }
+
+    setConfigHint(msg) {
+      if (this.configHintEl) this.configHintEl.textContent = msg;
+    }
+
+    renderWelcome() {
+      if (!this.messagesEl) return;
+      this.messagesEl.innerHTML = "";
+      const welcome =
+        this.lang === "ru"
+          ? "Время струится сквозь пальцы, как тончайший золотой песок — но каждая мысль, обретшая форму, ложится камнем в пирамиду вечности. О чём вы желаете спросить Хранителя?"
+          : "Time drifts like the finest golden sand — yet every question shaped with clarity lays another stone in the pyramid of eternity. What weighs upon your mind tonight, traveler?";
+      this.appendMessage("sage", welcome);
+    }
+
+    appendMessage(role, text) {
+      if (!this.messagesEl) return null;
+      const box = document.createElement("div");
+      box.className =
+        role === "user"
+          ? "dg-sage-msg dg-sage-msg--user"
+          : role === "notice"
+          ? "dg-sage-msg dg-sage-msg--notice"
+          : "dg-sage-msg dg-sage-msg--sage";
+
+      if (role !== "notice") {
+        const lbl = document.createElement("span");
+        lbl.className = "dg-sage-msg-role";
+        lbl.textContent =
+          role === "user"
+            ? this.lang === "ru"
+              ? "ВЫ"
+              : "YOU"
+            : this.lang === "ru"
+            ? "ХРОНОС · ПЕСОЧНЫЙ МУДРЕЦ"
+            : "CHRONOS · SAND SAGE";
+        box.appendChild(lbl);
+      }
+
+      const body = document.createElement("div");
+      body.className = "dg-sage-msg-body";
+      body.textContent = text;
+      box.appendChild(body);
+      this.messagesEl.appendChild(box);
+      this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
+      return body;
+    }
+
+    playChime(freq = 440, dur = 0.25) {
+      if (!this.audioEnabled) return;
+      try {
+        if (!this.audioCtx) {
+          const AC = window.AudioContext || window.webkitAudioContext;
+          if (!AC) return;
+          this.audioCtx = new AC();
+        }
+        if (this.audioCtx.state === "suspended") this.audioCtx.resume();
+        const t = this.audioCtx.currentTime;
+        const osc = this.audioCtx.createOscillator();
+        const gain = this.audioCtx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, t);
+        gain.gain.setValueAtTime(0.0001, t);
+        gain.gain.exponentialRampToValueAtTime(0.032, t + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        osc.connect(gain);
+        gain.connect(this.audioCtx.destination);
+        osc.start(t);
+        osc.stop(t + dur + 0.02);
+      } catch (e) {}
+    }
+
+    async pingWebhook() {
+      const target = (this.webhookInputEl ? this.webhookInputEl.value.trim() : "") || this.webhookUrl;
+      this.setConfigHint(this.lang === "ru" ? "Проверка..." : "Pinging...");
+      try {
+        const res = await fetch(target, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            message: this.lang === "ru" ? "Приветствие" : "Hello",
+            lang: this.lang,
+            history: [],
+            ping: true,
+            sessionId: this.sessionId,
+          }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        this.setConnectionStatus("connected");
+        this.setConfigHint(this.lang === "ru" ? "✓ Соединение активно" : "✓ Connected");
+      } catch (err) {
+        this.setConnectionStatus("offline");
+        this.setConfigHint(
+          this.lang === "ru"
+            ? `Ошибка (${err.message}). Проверьте сценарий в n8n.`
+            : `Offline (${err.message}). Activate workflow in n8n.`
+        );
+      }
+    }
+
+    extractReply(data) {
+      if (typeof data === "string") return data.trim();
+      const item = Array.isArray(data) ? data[0] : data;
+      if (!item || typeof item !== "object") return "";
+      return String(
+        item.reply || item.output || item.text || item.message || item.answer || item.content || ""
+      ).trim();
+    }
+
+    async streamSpeech(bodyEl, fullText) {
+      this.setAvatarState("speaking");
+      this.playChime(396, 0.35);
+      const tokens = fullText.split(/(\s+)/);
+      let acc = "";
+      const delayMs = tokens.length > 140 ? 18 : 30;
+      for (let i = 0; i < tokens.length; i++) {
+        acc += tokens[i];
+        bodyEl.textContent = acc;
+        if (tokens[i].trim()) {
+          this.speechTarget = 0.55 + (Math.sin(i * 1.9) * 0.5 + 0.5) * 0.45;
+        } else {
+          this.speechTarget = 0.25;
+        }
+        this.messagesEl.scrollTop = this.messagesEl.scrollHeight;
+        await new Promise((r) => setTimeout(r, delayMs));
+      }
+      this.speechTarget = 0;
+      this.setAvatarState("idle");
+    }
+
+    async sendMessage(text) {
+      if (this.isBusy || !text) return;
+      this.isBusy = true;
+      if (this.sendBtnEl) this.sendBtnEl.disabled = true;
+      if (this.inputEl) this.inputEl.value = "";
+
+      this.appendMessage("user", text);
+      this.history.push({ role: "user", content: text });
+      this.setAvatarState("thinking");
+      this.playChime(293.66, 0.22);
+
+      try {
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 38000);
+        const res = await fetch(this.webhookUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          signal: ctrl.signal,
+          body: JSON.stringify({
+            message: text,
+            lang: this.lang,
+            sessionId: this.sessionId,
+            history: this.history.slice(-10),
+          }),
+        });
+        clearTimeout(timer);
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const rawText = await res.text();
+        let parsed = rawText;
+        try {
+          parsed = JSON.parse(rawText);
+        } catch (e) {}
+
+        const reply = this.extractReply(parsed);
+        if (!reply) throw new Error("Empty response from n8n");
+
+        this.setConnectionStatus("connected");
+        this.history.push({ role: "assistant", content: reply });
+        const bodyEl = this.appendMessage("sage", "");
+        await this.streamSpeech(bodyEl, reply);
+      } catch (err) {
+        this.setConnectionStatus("offline");
+        this.setAvatarState("idle");
+        const notice =
+          this.lang === "ru"
+            ? `ИИ-вебхук n8n сейчас недоступен (${this.webhookUrl} → ${err.message}). Импортируйте готовый сценарий tools/n8n_sand_sage_workflow.json в https://n8n.drgii.ru и активируйте его, или укажите свой URL в настройках ⚙ выше.`
+            : `n8n AI webhook is not reachable yet (${this.webhookUrl} → ${err.message}). Import tools/n8n_sand_sage_workflow.json into https://n8n.drgii.ru and activate the workflow, or set your endpoint via ⚙ above.`;
+        this.appendMessage("notice", notice);
+      } finally {
+        this.isBusy = false;
+        if (this.sendBtnEl) this.sendBtnEl.disabled = false;
+      }
+    }
+
+    startLoop() {
+      const resize = () => {
+        const rect = this.frameEl.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        const w = Math.max(1, Math.round(rect.width * dpr));
+        const h = Math.max(1, Math.round(rect.height * dpr));
+        if (this.canvas.width !== w || this.canvas.height !== h) {
+          this.canvas.width = w;
+          this.canvas.height = h;
+        }
+      };
+      resize();
+      window.addEventListener("resize", resize);
+
+      const obs = new IntersectionObserver(
+        (entries) => {
+          this.isVisible = entries[0] ? entries[0].isIntersecting : true;
+        },
+        { threshold: 0.05 }
+      );
+      obs.observe(this.frameEl);
+
+      let lastTs = performance.now();
+      const frame = (now) => {
+        const dt = Math.min(0.05, (now - lastTs) / 1000);
+        lastTs = now;
+        if (!document.hidden && this.isVisible) {
+          this.updateAvatar(dt, now * 0.001);
+          this.renderAvatar(now * 0.001);
+        }
+        requestAnimationFrame(frame);
+      };
+      requestAnimationFrame(frame);
+    }
+
+    updateAvatar(dt, timeSec) {
+      const tx = this.ptrActive ? this.ptrX : 0.5 + Math.sin(timeSec * 0.35) * 0.03;
+      const ty = this.ptrActive
+        ? this.ptrY
+        : this.avatarState === "listening"
+        ? 0.58
+        : 0.44 + Math.cos(timeSec * 0.4) * 0.02;
+      this.smoothPtrX += (tx - this.smoothPtrX) * Math.min(1, dt * 4.5);
+      this.smoothPtrY += (ty - this.smoothPtrY) * Math.min(1, dt * 4.5);
+
+      const thinkGoal = this.avatarState === "thinking" ? 1 : 0;
+      this.thinkMix += (thinkGoal - this.thinkMix) * Math.min(1, dt * 4.2);
+      this.speechEnergy += (this.speechTarget - this.speechEnergy) * Math.min(1, dt * 11);
+
+      // Periodic calm blink
+      this.blinkTimer -= dt;
+      if (this.blinkTimer <= 0) {
+        this.blinkTimer = 4.2 + Math.random() * 3.4;
+        this.blinkVal = 1.0;
+      }
+      if (this.blinkVal > 0) {
+        this.blinkVal = Math.max(0, this.blinkVal - dt * 6.5);
+      }
+
+      const boost = 1 + this.thinkMix * 1.7 + this.speechEnergy * 1.1;
+      for (const p of this.particles) {
+        if (p.kind === "fall") {
+          p.v += p.vy * dt * boost;
+          p.u += (p.vx + Math.sin(timeSec * 2 + p.phase) * 0.006) * dt;
+          if (this.ptrActive) {
+            const dx = p.u - this.smoothPtrX;
+            const dy = p.v - this.smoothPtrY;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 0.025 && d2 > 1e-5) {
+              const d = Math.sqrt(d2);
+              p.u += (dx / d) * dt * 0.14;
+            }
+          }
+          if (p.v > 0.96) {
+            p.v = 0.35 + Math.random() * 0.25;
+            p.u = p.isLeft ? 0.21 + Math.random() * 0.17 : 0.62 + Math.random() * 0.17;
+          }
+        } else {
+          // Ambient / Orbital mote
+          p.orbitAngle += p.orbitSpeed * dt * (0.4 + this.thinkMix * 2.4);
+          if (this.thinkMix > 0.08) {
+            const ox = 0.5 + Math.cos(p.orbitAngle) * p.orbitRadius;
+            const oy = 0.4 + Math.sin(p.orbitAngle) * (p.orbitRadius * 0.85);
+            p.u += (ox - p.u) * dt * 2.4 * this.thinkMix;
+            p.v += (oy - p.v) * dt * 2.4 * this.thinkMix;
+          } else {
+            p.u += (p.vx + Math.sin(timeSec + p.phase) * 0.008) * dt;
+            p.v += p.vy * dt * (1 + this.speechEnergy * 0.9);
+            if (p.v < 0.05) {
+              p.v = 0.94;
+              p.u = 0.12 + Math.random() * 0.76;
+            }
+          }
+          if (this.ptrActive) {
+            const dx = p.u - this.smoothPtrX;
+            const dy = p.v - this.smoothPtrY;
+            const d2 = dx * dx + dy * dy;
+            if (d2 < 0.032 && d2 > 1e-5) {
+              const d = Math.sqrt(d2);
+              p.u += (dx / d) * dt * 0.22;
+              p.v += (dy / d) * dt * 0.22;
+            }
+          }
+        }
+      }
+    }
+
+    renderAvatar(timeSec) {
+      const ctx = this.ctx;
+      const cw = this.canvas.width;
+      const ch = this.canvas.height;
+      ctx.clearRect(0, 0, cw, ch);
+      ctx.fillStyle = "#0d0a07";
+      ctx.fillRect(0, 0, cw, ch);
+
+      const parDx = (this.smoothPtrX - 0.5) * -14;
+      const parDy = (this.smoothPtrY - 0.45) * -10;
+      const breath = 1 + 0.011 * Math.sin(timeSec * 1.4) + this.speechEnergy * 0.012;
+
+      if (this.imgReady && this.img) {
+        const iw = this.img.width;
+        const ih = this.img.height;
+        const scale = Math.max(cw / iw, ch / ih) * breath;
+        const dw = iw * scale;
+        const dh = ih * scale;
+        const dx = (cw - dw) * 0.5 + parDx;
+        const dy = (ch - dh) * 0.35 + parDy;
+
+        ctx.drawImage(this.img, dx, dy, dw, dh);
+
+        // Luminous amber eye glints synced to portrait pupils (0.444, 0.361) & (0.556, 0.361)
+        const blinkCurve = Math.sin(this.blinkVal * Math.PI);
+        const eyeOpen = Math.max(0.08, 1 - blinkCurve);
+        const eyePower = (0.36 + this.thinkMix * 0.45 + this.speechEnergy * 0.35) * eyeOpen;
+        const eyeCoords = [
+          [dx + dw * 0.444, dy + dh * 0.361],
+          [dx + dw * 0.556, dy + dh * 0.361],
+        ];
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        for (const [ex, ey] of eyeCoords) {
+          const r = dw * 0.042;
+          const eg = ctx.createRadialGradient(ex, ey, 0, ex, ey, r);
+          eg.addColorStop(0, `rgba(255, 224, 142, ${eyePower})`);
+          eg.addColorStop(0.45, `rgba(232, 162, 68, ${eyePower * 0.45})`);
+          eg.addColorStop(1, "rgba(220, 140, 40, 0)");
+          ctx.fillStyle = eg;
+          ctx.beginPath();
+          ctx.arc(ex, ey, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        // Speaking harmonic aura at voice center (mouth/beard) & thinking brow crown
+        if (this.speechEnergy > 0.04) {
+          const mx = dx + dw * 0.5;
+          const my = dy + dh * 0.445;
+          const mr = dw * (0.14 + this.speechEnergy * 0.09);
+          const sg = ctx.createRadialGradient(mx, my, 2, mx, my, mr);
+          sg.addColorStop(0, `rgba(255, 224, 152, ${this.speechEnergy * 0.36})`);
+          sg.addColorStop(0.55, `rgba(228, 174, 88, ${this.speechEnergy * 0.16})`);
+          sg.addColorStop(1, "rgba(228, 174, 88, 0)");
+          ctx.fillStyle = sg;
+          ctx.beginPath();
+          ctx.arc(mx, my, mr, 0, Math.PI * 2);
+          ctx.fill();
+        }
+
+        if (this.thinkMix > 0.03) {
+          const hx = dx + dw * 0.5;
+          const hy = dy + dh * 0.36;
+          const hr = dw * 0.32;
+          const hg = ctx.createRadialGradient(hx, hy, hr * 0.3, hx, hy, hr);
+          hg.addColorStop(0, "rgba(255, 212, 128, 0)");
+          hg.addColorStop(0.7, `rgba(244, 190, 96, ${this.thinkMix * 0.18})`);
+          hg.addColorStop(1, "rgba(244, 190, 96, 0)");
+          ctx.fillStyle = hg;
+          ctx.beginPath();
+          ctx.arc(hx, hy, hr, 0, Math.PI * 2);
+          ctx.fill();
+        }
+        ctx.restore();
+      }
+
+      // Falling & floating live golden sand grains
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      for (const p of this.particles) {
+        const px = p.u * cw + (p.kind === "mote" ? parDx * 1.4 : parDx * 0.8);
+        const py = p.v * ch + (p.kind === "mote" ? parDy * 1.4 : parDy * 0.8);
+        const twinkle = 0.6 + 0.4 * Math.sin(timeSec * 3.1 + p.phase);
+        const edgeFade = p.kind === "fall" ? clamp(1 - Math.abs(p.v - 0.68) * 2.1, 0.15, 1) : 1;
+        const a = clamp(
+          p.alpha * twinkle * edgeFade * (1 + this.thinkMix * 0.45 + this.speechEnergy * 0.35),
+          0,
+          0.95
+        );
+        const rad = p.r * (cw / 420);
+        ctx.fillStyle = p.kind === "fall" ? `rgba(235, 184, 98, ${a})` : `rgba(255, 224, 148, ${a})`;
+        ctx.beginPath();
+        ctx.arc(px, py, rad, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.restore();
+
+      // Soft bottom & outer vignette blending seamlessly with HUD pills
+      const vig = ctx.createRadialGradient(cw * 0.5, ch * 0.42, cw * 0.28, cw * 0.5, ch * 0.48, cw * 0.72);
+      vig.addColorStop(0, "rgba(0,0,0,0)");
+      vig.addColorStop(1, "rgba(10, 7, 5, 0.78)");
+      ctx.fillStyle = vig;
+      ctx.fillRect(0, 0, cw, ch);
+
+      const botFade = ctx.createLinearGradient(0, ch * 0.76, 0, ch);
+      botFade.addColorStop(0, "rgba(13, 10, 7, 0)");
+      botFade.addColorStop(1, "rgba(13, 10, 7, 0.92)");
+      ctx.fillStyle = botFade;
+      ctx.fillRect(0, ch * 0.76, cw, ch * 0.24);
+    }
+  }
+
+  // =========================================================
   // Main Motion Stage Application
   // =========================================================
   class StudyMotionApp {
@@ -2998,6 +3708,8 @@
         }
       });
 
+      this.sandSage = new SandSageOracle(this.lang);
+
       this.langButtons = Array.from(document.querySelectorAll(".sand-lang-btn[data-lang]"));
       this.langButtons.forEach((btn) => {
         btn.addEventListener("click", () => {
@@ -3061,6 +3773,12 @@
             el.innerHTML = dict[key];
           }
         });
+        document.querySelectorAll("[data-i18n-placeholder]").forEach((el) => {
+          const key = el.getAttribute("data-i18n-placeholder");
+          if (dict[key] !== undefined) {
+            el.setAttribute("placeholder", dict[key]);
+          }
+        });
       }
 
       if (this.activeDossierBook) {
@@ -3068,6 +3786,9 @@
       }
       if (this.gallery) {
         this.gallery.setLanguage(lang);
+      }
+      if (this.sandSage) {
+        this.sandSage.setLanguage(lang);
       }
     }
 

@@ -1,0 +1,150 @@
+{
+  "name": "Dr. Gii — Sand Philosopher AI Chat",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sand-sage",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "b1f2c3d4-1111-4444-8888-000000000001",
+      "name": "Webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [220, 300],
+      "webhookId": "sand-sage-webhook-drgii"
+    },
+    {
+      "parameters": {
+        "jsCode": "const input = $input.first().json;\nconst payload = (input && input.body && typeof input.body === 'object') ? input.body : input;\n\nconst userMessage = String(payload.message || '').trim();\nconst lang = payload.lang === 'ru' ? 'ru' : 'en';\nconst rawHistory = Array.isArray(payload.history) ? payload.history : [];\n\nconst systemPrompt = lang === 'ru'\n  ? `Ты — Хранитель Песка (Песочный Философ) из кабинета Dr. Gii.\nТы соткан из золотых песчинок времени и созерцаешь вечность сквозь песочные часы.\nТвоя философия: время убегает как песок — у одних оно проходит сквозь пальцы, а мудрец возводит из песка пирамиду на тысячелетия. Ты ценишь тишину, внутреннюю музыку, поэзию, космос, стоицизм и искусство осмысленной жизни.\nОтвечай на русском языке, тепло, мудро, образно, иногда с тонкими метафорами о песке, времени, тишине и звёздах. Пиши лаконично и глубоко (обычно 2–4 абзаца или несколько ёмких фраз), обращайся к сути вопроса собеседника.`\n  : `You are the Sand Sage (Philosopher of Sand & Time) in Dr. Gii's cosmic study.\nYou are woven from luminous grains of ancient golden sand, watching eternity flow through the hourglass.\nYour philosophy: time slipping away is like sand — for some it runs through their fingers, yet a sage builds from that sand a pyramid to stand for millennia. You speak of time, silence and melody, stoic clarity, poetry, and the architecture of meaning.\nRespond warmly, wisely, and poetically with subtle metaphors of sand, light, silence, and time. Keep answers deeply thoughtful yet concise (2–4 vivid sentences or short paragraphs).`;\n\nconst messages = [{ role: 'system', content: systemPrompt }];\n\nfor (const item of rawHistory.slice(-10)) {\n  if (!item || !item.content) continue;\n  const role = item.role === 'assistant' ? 'assistant' : 'user';\n  messages.push({ role, content: String(item.content).slice(0, 2000) });\n}\n\nif (userMessage) {\n  const last = messages[messages.length - 1];\n  if (!last || last.role !== 'user' || last.content !== userMessage) {\n    messages.push({ role: 'user', content: userMessage.slice(0, 2000) });\n  }\n}\n\nreturn [{\n  json: {\n    lang,\n    requestBody: {\n      model: 'gpt-6-luna',\n      temperature: 0.78,\n      max_tokens: 600,\n      messages\n    }\n  }\n}];"
+      },
+      "id": "b1f2c3d4-2222-4444-8888-000000000002",
+      "name": "Prepare Prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://ru.cheapvibecode.ru/v1/chat/completions",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ЗАМЕНИТЕ_НА_ВАШ_API_КЛЮЧ"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json.requestBody) }}",
+        "options": {
+          "timeout": 45000
+        }
+      },
+      "id": "b1f2c3d4-3333-4444-8888-000000000003",
+      "name": "LLM Philosopher API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const res = $input.first().json;\nlet reply = '';\nif (res && Array.isArray(res.choices) && res.choices[0] && res.choices[0].message) {\n  reply = String(res.choices[0].message.content || '').trim();\n} else if (res && res.reply) {\n  reply = String(res.reply).trim();\n} else if (res && res.output) {\n  reply = String(res.output).trim();\n}\n\nif (!reply) {\n  reply = 'The sands shift quietly, yet no voice returned from the oracle. Please check the API key inside the n8n workflow.';\n}\n\nreturn [{\n  json: {\n    reply,\n    philosopher: 'Sand Sage',\n    timestamp: new Date().toISOString()\n  }\n}];"
+      },
+      "id": "b1f2c3d4-4444-4444-8888-000000000004",
+      "name": "Format Reply",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [940, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseHeaders": {
+            "entries": [
+              {
+                "name": "Access-Control-Allow-Origin",
+                "value": "*"
+              },
+              {
+                "name": "Access-Control-Allow-Methods",
+                "value": "POST, OPTIONS"
+              },
+              {
+                "name": "Access-Control-Allow-Headers",
+                "value": "Content-Type"
+              }
+            ]
+          }
+        }
+      },
+      "id": "b1f2c3d4-5555-4444-8888-000000000005",
+      "name": "Respond to Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1180, 300]
+    }
+  ],
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Prepare Prompt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Prompt": {
+      "main": [
+        [
+          {
+            "node": "LLM Philosopher API",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "LLM Philosopher API": {
+      "main": [
+        [
+          {
+            "node": "Format Reply",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Format Reply": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  }
+}
