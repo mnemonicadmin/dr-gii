@@ -3192,15 +3192,15 @@
       }
 
       // Wide desktop viewport:
-      // Keep gentleman's head (top ~135px -> safe top 118px) AND the full desk (bottom ~736px) visible.
-      const SAFE_TOP = 118;
-      const SAFE_BOTTOM = 736;
-      const MIN_VISIBLE_H = SAFE_BOTTOM - SAFE_TOP;
+      // Fill full width while keeping the gentleman's full figure (head ~135px to hands ~566px) visible;
+      // the lower part of the desk may be cropped on wide screens.
+      const SAFE_TOP = 115;
+      const SAFE_FIGURE_BOTTOM = 570;
+      const MIN_VISIBLE_H = SAFE_FIGURE_BOTTOM - SAFE_TOP; // 455px
       const scale = Math.min(cw / SCENE_W, ch / MIN_VISIBLE_H);
       const visibleH = ch / scale;
       const cropTotal = Math.max(0, SCENE_H - visibleH);
-      const bottomCrop = Math.min(SCENE_H - SAFE_BOTTOM, cropTotal * 0.2);
-      const topCrop = Math.min(SAFE_TOP, cropTotal - bottomCrop);
+      const topCrop = Math.min(SAFE_TOP, cropTotal * 0.85);
       return {
         scale,
         offsetX: (cw - SCENE_W * scale) * 0.5,
@@ -3922,33 +3922,33 @@
       }
       ctx.restore();
 
-      // Subtle cinematic vignette
+      // Subtle cinematic vignette (pushed outward so wide edges stay open)
       const vig = ctx.createRadialGradient(
         SCENE_W * 0.5,
         SCENE_H * 0.48,
-        SCENE_W * 0.34,
+        SCENE_W * 0.44,
         SCENE_W * 0.5,
         SCENE_H * 0.5,
-        SCENE_W * 0.68
+        SCENE_W * 0.84
       );
       vig.addColorStop(0, "rgba(0,0,0,0)");
-      vig.addColorStop(1, `rgba(8, 4, 2, ${0.34 + this.nightMix * 0.22})`);
+      vig.addColorStop(1, `rgba(8, 4, 2, ${0.28 + this.nightMix * 0.22})`);
       ctx.fillStyle = vig;
       ctx.fillRect(0, 0, SCENE_W, SCENE_H);
 
-      // Soft fade into darkness on left & right edges on ultra-wide monitors
+      // Soft fade into darkness on left & right edges only on extreme ultra-wide monitors
       if (offsetX > 1) {
-        const edgeW = 90;
+        const edgeW = 48;
         const leftFade = ctx.createLinearGradient(0, 0, edgeW, 0);
         leftFade.addColorStop(0, "rgba(18, 12, 8, 1)");
-        leftFade.addColorStop(0.35, "rgba(18, 12, 8, 0.62)");
+        leftFade.addColorStop(0.45, "rgba(18, 12, 8, 0.48)");
         leftFade.addColorStop(1, "rgba(18, 12, 8, 0)");
         ctx.fillStyle = leftFade;
         ctx.fillRect(0, 0, edgeW, SCENE_H);
 
         const rightFade = ctx.createLinearGradient(SCENE_W - edgeW, 0, SCENE_W, 0);
         rightFade.addColorStop(0, "rgba(18, 12, 8, 0)");
-        rightFade.addColorStop(0.65, "rgba(18, 12, 8, 0.62)");
+        rightFade.addColorStop(0.55, "rgba(18, 12, 8, 0.48)");
         rightFade.addColorStop(1, "rgba(18, 12, 8, 1)");
         ctx.fillStyle = rightFade;
         ctx.fillRect(SCENE_W - edgeW, 0, edgeW, SCENE_H);
