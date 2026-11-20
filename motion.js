@@ -3804,50 +3804,6 @@
       ctx.fillStyle = "#120c08";
       ctx.fillRect(0, 0, cw, ch);
 
-      // On ultra-wide monitors where central scene is flanked by side margins,
-      // seamlessly extend the study shelves & desk into soft ambient wings.
-      if (offsetX > 1 && this.bgStudyImg) {
-        const sceneWpx = SCENE_W * scale;
-        const sceneHpx = SCENE_H * scale;
-
-        ctx.save();
-        ctx.filter = "blur(8px)";
-        // Left mirrored wing
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(0, 0, offsetX + 2, ch);
-        ctx.clip();
-        ctx.translate(offsetX, offsetY);
-        ctx.scale(-1, 1);
-        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
-        ctx.restore();
-
-        // Right mirrored wing
-        ctx.save();
-        ctx.beginPath();
-        ctx.rect(offsetX + sceneWpx - 2, 0, cw - (offsetX + sceneWpx) + 2, ch);
-        ctx.clip();
-        ctx.translate(offsetX + sceneWpx * 2, offsetY);
-        ctx.scale(-1, 1);
-        ctx.drawImage(this.bgStudyImg, 0, 0, sceneWpx, sceneHpx);
-        ctx.restore();
-        ctx.restore();
-
-        // Soft vignette darkening over the side wings
-        const leftShade = ctx.createLinearGradient(0, 0, offsetX + 2, 0);
-        leftShade.addColorStop(0, "rgba(10, 7, 5, 0.78)");
-        leftShade.addColorStop(1, "rgba(14, 9, 6, 0.22)");
-        ctx.fillStyle = leftShade;
-        ctx.fillRect(0, 0, offsetX + 2, ch);
-
-        const rightStart = offsetX + sceneWpx - 2;
-        const rightShade = ctx.createLinearGradient(rightStart, 0, cw, 0);
-        rightShade.addColorStop(0, "rgba(14, 9, 6, 0.22)");
-        rightShade.addColorStop(1, "rgba(10, 7, 5, 0.78)");
-        ctx.fillStyle = rightShade;
-        ctx.fillRect(rightStart, 0, cw - rightStart, ch);
-      }
-
       if (offsetX > 1) {
         ctx.beginPath();
         ctx.rect(offsetX, 0, SCENE_W * scale, ch);
@@ -3980,19 +3936,21 @@
       ctx.fillStyle = vig;
       ctx.fillRect(0, 0, SCENE_W, SCENE_H);
 
-      // Soft seam feathering when flanked by ambient wings on ultra-wide monitors
+      // Soft fade into darkness on left & right edges on ultra-wide monitors
       if (offsetX > 1) {
-        const edgeW = 36;
-        const leftSeam = ctx.createLinearGradient(0, 0, edgeW, 0);
-        leftSeam.addColorStop(0, "rgba(14, 9, 6, 0.34)");
-        leftSeam.addColorStop(1, "rgba(14, 9, 6, 0)");
-        ctx.fillStyle = leftSeam;
+        const edgeW = 90;
+        const leftFade = ctx.createLinearGradient(0, 0, edgeW, 0);
+        leftFade.addColorStop(0, "rgba(18, 12, 8, 1)");
+        leftFade.addColorStop(0.35, "rgba(18, 12, 8, 0.62)");
+        leftFade.addColorStop(1, "rgba(18, 12, 8, 0)");
+        ctx.fillStyle = leftFade;
         ctx.fillRect(0, 0, edgeW, SCENE_H);
 
-        const rightSeam = ctx.createLinearGradient(SCENE_W - edgeW, 0, SCENE_W, 0);
-        rightSeam.addColorStop(0, "rgba(14, 9, 6, 0)");
-        rightSeam.addColorStop(1, "rgba(14, 9, 6, 0.34)");
-        ctx.fillStyle = rightSeam;
+        const rightFade = ctx.createLinearGradient(SCENE_W - edgeW, 0, SCENE_W, 0);
+        rightFade.addColorStop(0, "rgba(18, 12, 8, 0)");
+        rightFade.addColorStop(0.65, "rgba(18, 12, 8, 0.62)");
+        rightFade.addColorStop(1, "rgba(18, 12, 8, 1)");
+        ctx.fillStyle = rightFade;
         ctx.fillRect(SCENE_W - edgeW, 0, edgeW, SCENE_H);
       }
 
